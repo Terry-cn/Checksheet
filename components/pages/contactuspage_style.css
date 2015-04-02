@@ -1,0 +1,21 @@
+﻿ 
+#ContactContainer {
+    width: 96%;
+    margin: 20px auto auto;
+}
+
+ #ContactContainer .editMessageArea {
+     width: 100%;
+     text-align: left;
+ }
+
+ #ContactContainer #btn_submit {
+     margin: auto;
+        width: 60%;
+    }
+ #ContactContainer .SendMessage {
+      margin-top: 30px;
+  }
+  #ContactContainer  #textareaChangeCols {
+ width: 100%;
+       }

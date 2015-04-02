@@ -1,0 +1,28 @@
+<ons-list class="list list--inset checklist general-info" >
+    <ons-list-header>
+        <ons-row>
+            <ons-col>Comments</ons-col>
+            <ons-col width="220px">Photos</ons-col>
+        </ons-row>
+    </ons-list-header>
+    <ons-list-item ng-repeat="comment in model.defects">
+        <ons-row>
+            <ons-col>
+                <input type="text" style="width: 90%"  ng-model="comment.comment" class="text-input--underbar" placeholder="Comments" />
+                <i class="fa fa-camera" ng-click="takePhotos(comment)"></i>
+            </ons-col>
+            <ons-col  width="250px">
+
+                <ul class="photo-list" style="display: inline-block; margin: 0;padding: 0">
+                    <li ng-repeat="photo in comment.images" ng-click="removePhoto(comment,photo)">
+                        <img ng-src="{{photo.path}}" />
+                    </li>
+                </ul>
+            </ons-col>
+        </ons-row>
+    </ons-list-item>
+    <ons-list-item>
+        <button class="button button--outline"  ng-click="prev()" style="margin-right:20px;">Checking list</button>
+        <button class="button button--outline" ng-click="addComment()"><img  style="width: 20px;vertical-align: middle;" src="images/icon.add.green.png"> Add Comments </button>
+    </ons-list-item>
+</ons-list>

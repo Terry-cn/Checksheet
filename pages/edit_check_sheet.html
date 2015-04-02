@@ -1,0 +1,27 @@
+<ons-page ng-controller="EditChecksheetController">
+        <ons-toolbar>
+            <div class="left">
+                <div class="left"><ons-back-button>Back</ons-back-button></div>
+            </div>
+            <div class="center">Edit Checksheets</div>
+            <div class="right toolbar-button">
+                <button class="button button--quiet" ng-click="save()">Save</button>
+            </div>
+        </ons-toolbar>
+        <div class="article-content form-check-sheet" >
+        <ons-tabbar class="content-tabs" var="sheetTabs" animation="fade">
+            <ons-tab class="button-bar__item" active="true" page="pages/general-information.html">
+                <button class="button-bar__button">General Information</button>
+            </ons-tab>
+            <ons-tab class="button-bar__item" page="pages/checksheets-list.html">
+                <button class="button-bar__button">Checking list</button>
+            </ons-tab>
+            <ons-tab class="button-bar__item" page="pages/defects-list.html">
+                <button class="button-bar__button">Defects</button>
+            </ons-tab>
+
+        </ons-tabbar>
+  
+    </div>
+
+</ons-page>

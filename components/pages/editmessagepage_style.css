@@ -1,0 +1,71 @@
+﻿.positionSet {
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+#EditMessageContainer {
+    width: 96%;
+    margin: 20px auto auto;
+}
+
+ #EditMessageContainer .editMessageArea {
+     width: 100%;
+     text-align: left;
+ }
+
+ #EditMessageContainer #btn_submit {
+     margin: auto;
+     width: 60%;
+    }
+ #EditMessageContainer .SendMessage {
+      margin-top: 30px;
+  }
+  #EditMessageContainer  #textareaChangeCols {
+ width: 100%;
+       }
+ //////下面是定义的关于textarea
+
+ .textarea {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 17px;
+  vertical-align: top;
+  resize: none;
+  outline: none;
+  padding: 5px 5px 5px 5px;
+  font-size: 15px;
+  font-weight: 400;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #1f1f21;
+  letter-spacing: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+}
+.textarea:disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+.textarea::-webkit-input-placeholder,
+.textarea::-moz-placeholder,
+.textarea:-ms-input-placeholder {
+  color: #999;
+}

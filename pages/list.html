@@ -1,0 +1,51 @@
+<ons-page>
+    <div id="list-checksheet" ng-controller="ChecksheetListController">
+        <ons-toolbar>
+            <div class="left">
+                <div class="left"><ons-back-button ng-click="syncOff()">Back</ons-back-button></div>
+            </div>
+            <div class="center">Checksheets</div>
+            <div class="right toolbar-button">
+                <i class="fa fa-plus-square-o Editeve " ng-click="addChecksheet()"></i>
+            </div>
+        </ons-toolbar>
+        <ons-list>
+            <ons-list-header>
+                <ons-row>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Town</th>
+                                <th>Address</th>
+                                <th>Site</th>
+                                <th>Asset</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Synced</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </ons-row>
+            </ons-list-header>
+            <ons-list-item>
+                <ons-row>
+                    <ons-scroller>
+                        <table>
+                            <tbody>
+                            <tr ng-repeat="sheet in CheckSheets" ng-click="itemClick(sheet)">
+                                <td>{{sheet.assetchecksheet.asset.location.site.town.name}}</td>
+                                <td>{{sheet.assetchecksheet.asset.location.address}}</td>
+                                <td>{{sheet.assetchecksheet.asset.location.site.name}}</td>
+                                <td>{{sheet.assetchecksheet.asset.assetName}}</td>
+                                <td ng-bind-html="sheet.add_date | formatDate"></td>
+                                <td ng-bind-html="sheet.add_date | formatTime"></td>
+                                <td><label ng-class="{0: 'icon-sync  icons-syncing', 1: 'icon-sync  icons-synced'}[sheet.status]"></label></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </ons-scroller>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+    </div>
+</ons-page>

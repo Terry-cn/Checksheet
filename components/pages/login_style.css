@@ -1,0 +1,122 @@
+﻿
+ #loginpwd {
+     width: 60%;
+     margin-bottom: 20px;
+ }
+.button:hover {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+.button:active {
+  background-color: #1284ff;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #fff;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+  opacity: 0.2;
+}
+.button:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  outline: 0;
+}
+.button:disabled,
+.button[disabled] {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+.button--large {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 36px;
+  padding: 4px 12px;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.button--large:active {
+  background-color: #1284ff;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #fff;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+  opacity: 0.2;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+.button--large:disabled,
+.button--large[disabled] {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+.button--large:hover {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+.button--large:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  outline: 0;
+}
+#login_container {
+     text-align: center;
+    color: rgb(31, 31, 33);
+    margin: 0 auto;
+    width: 50%;
+    margin-top: 10%;
+    font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+ }
+ #login_container #loginPage_logo {
+     margin: 0 0 50pt 0;
+ }
+  #login_container  .login_title {
+       text-align: center;
+   /*   font-weight: bold;*/
+      margin: 0;
+      font-size: 14px;
+   }
+ #login_container input {
+    width:100%;
+    height: 45px;
+     border:0;
+}
+ #login_container input[type="email"]{
+       -webkit-border-radius: 15px 15px 0 0;
+     border-bottom: 1px solid #ccc;
+ }
+ #login_container input[type="password"]{
+     -webkit-border-radius:  0 0 15px 15px;
+ }
+ #login_container #btn_login {
+     background: #fff;
+     margin: auto;
+     display: inline-block;
+     color:#4E81BA;
+ }
+  #login_container  .login_content {
+      
+      margin: 10px auto;
+      font-size: 14px;
+      text-align: left;
+      width: 90%;
+      line-height: 18px;
+  } 
+  #login_container .login_foot {
+      font-size: 14px;
+      margin-top: 45px;
+      align-content: center;
+  }

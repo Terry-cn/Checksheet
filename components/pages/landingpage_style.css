@@ -1,0 +1,180 @@
+﻿#LandingPageContainer {
+    margin: auto;
+    width: 90%;
+    text-align: center;
+}
+
+.Editeve {
+    padding: 4px;
+    font-size: 26px;
+}
+
+.checkbox--noborder > input[type="checkbox"] {
+  position: absolute;
+  overflow: hidden;
+  right: 0px;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  padding: 0;
+  border: 0;
+  opacity: 0.001;
+  z-index: 1;
+  vertical-align: top;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.checkbox--noborder {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 20px;
+  margin: 5px 0;
+  position: relative;
+  overflow: hidden;
+}
+.checkbox--noborder > .checkbox__checkmark {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  height: 20px;
+  background: transparent;
+  border: 1px solid blue;
+}
+#borderSet {
+    border: 1px solid #bfc7c0;
+}
+.checkbox--noborder > input[type="checkbox"] {
+  position: absolute;
+  overflow: hidden;
+  right: 0px;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  padding: 0;
+  border: 0;
+  opacity: 0.001;
+  z-index: 1;
+  vertical-align: top;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 0;
+  width: 0;
+}
+.checkbox--noborder > input[type="checkbox"]:checked + .checkbox__checkmark:before {
+  background: transparent;
+  border: none;
+}
+.checkbox--noborder > input[type="checkbox"]:checked + .checkbox__checkmark:after {
+  opacity: 1;
+}
+.checkbox--noborder > .checkbox__checkmark:before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  -webkit-border-radius: 16px;
+  border-radius: 16px;
+  left: 0;
+}
+.checkbox--noborder > .checkbox__checkmark {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  width: 24px;
+  height: 20px;
+  border: none;
+}
+.checkbox--noborder > .checkbox__checkmark:after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  opacity: 0;
+  width: 12px;
+  height: 6px;
+  background: transparent;
+  border: 2px solid #1284ff;
+  border-width: 2px;
+  border-top: none;
+  border-right: none;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.checkbox--noborder > input[type="checkbox"]:focus + .checkbox__checkmark:before {
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.checkbox--noborder > input[type="checkbox"]:disabled + .checkbox__checkmark {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+.checkbox--noborder > input[type="checkbox"]:disabled:active + .checkbox--noborder__checkmark:before {
+  background: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border: none;
+}
+/////////////////////////
+#LandingPageContainer .landingPage_logo {
+    margin-top: 10px;
+}
+
+#LandingPageContainer .landingContent {
+    font-size: 14px;
+    line-height: 20px;
+    text-align: left;
+}
+
+#LandingPageContainer .landingP_title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
