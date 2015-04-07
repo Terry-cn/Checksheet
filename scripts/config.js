@@ -1,6 +1,6 @@
 window.Nova ={
 	config:{
-		remoteAddress : 'http://jbis.cloudapp.net/Dev',
+		remoteAddress : 'http://eprodata.cloudapp.net',
 		//remoteAddress : 'http://localhost:81',
 		debug:true,
 		version:null,
