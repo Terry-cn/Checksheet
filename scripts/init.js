@@ -54,7 +54,7 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
             }),ajaxOption).success(function(data){
                 ajaxOption.headers.Authorization = data.token_type + ' '+data.access_token;
                 localStorage.setItem('Authorization',ajaxOption.headers.Authorization);
-                dbSync.startSync($http,ajaxOption);
+                dbSync.startSync($http,ajaxOption,$rootScope);
                 // ons.notification.alert({
                 //     message:data.access_token
                 // });
@@ -241,6 +241,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                     items.forEach(function(item){
                         if($scope.isInsert){
                             item.result = 2;
+                            item.comment= "";
                         }else{
                             dbModel.assetchecksheet.items.list(function(items){
                                 
@@ -606,8 +607,12 @@ module.filter('trustHtml', function ($sce) {
 module.filter('formatTime', function ($sce) {
 
     return function (input) {
-        if(input)
-            return $sce.trustAsHtml(moment(input).format('YYYY/MM/DD h:mm A'));
+        if(input){
+            var datetime =moment(input);
+            datetime.local();
+            return $sce.trustAsHtml(datetime.format('YYYY/MM/DD h:mm A'));
+        }
+            
         return "";
     }
 

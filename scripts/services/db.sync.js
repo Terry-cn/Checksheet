@@ -39,7 +39,7 @@ Nova.services.db.DBSync =  (function(){
 		var dbServices = new Nova.services.db();
 		var syncTimer = {};
 		//http://stage.iiuk.homeip.net/Pages/Healthboard_App/webservice.php?type=2&id=[uuid]&os=8.1&device=iphone6s&version=1.0&last_content_synced=2013-12-12
-		this.startSync = function($http,ajaxOption){
+		this.startSync = function($http,ajaxOption,$rootScope){
 			
 			window.syncEntityList.push(Towns);
 			window.syncEntityList.push(Sites);
@@ -59,7 +59,7 @@ Nova.services.db.DBSync =  (function(){
 				console.log("sync all start");
 				var tmpEntityList = window.syncEntityList.concat([]);
 				async.each(tmpEntityList,function(item,eachCallback){
-					item.syncAll(persistence.sync.preferLocalConflictHandler, function() {
+					item.syncAll(persistence.sync.preferRemoteConflictHandler, function() {
 						console.log("sync success",item.meta.name);
 						eachCallback();
 						console.log(window.syncEntityList.length);
@@ -72,6 +72,7 @@ Nova.services.db.DBSync =  (function(){
 					});
 				},function(err){
 					console.log("sync timer start");
+					$rootScope.$broadcast('refreshCheckList');
 					setTimeout(function(){
 						runSync(callback);
 					},Nova.config.syncTime);

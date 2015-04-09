@@ -154,7 +154,6 @@ persistence.sync.postJSON = function(uri, data, callback,errorCallback) {
       var fieldSpec = meta.fields; 
       
       var objectsToRemove = [];
-
       objects.forEach(function(item) {
           if(item._removed) { // special marker
             objectsToRemove.push(item.id);
@@ -169,12 +168,24 @@ persistence.sync.postJSON = function(uri, data, callback,errorCallback) {
         groupedIds.push(ids.slice(i*100, i*100+100));
       }
       persistence.asyncForEach(groupedIds, function(idGroup, next) {
+        if(Entity.meta.name == 'checksheets'){
+          console.log(groupedIds,idGroup);
+        }
         Entity.all(session).filter('id', 'in', idGroup).list(function(groupOfExistingItems) {
-          existingItems.concat(groupOfExistingItems);
+          if(Entity.meta.name == 'checksheets'){
+            console.log(existingItems,groupOfExistingItems);
+          }
+          existingItems  = existingItems.concat(groupOfExistingItems);
           next();
         });
       }, function() {
+          if(Entity.meta.name == 'checksheets'){
+            console.log(existingItems);
+          }
           existingItems.forEach(function(localItem) {
+            if(Entity.meta.name == 'checksheets'){
+            console.log(localItem);
+          }
               var remoteItem = lookupTbl[localItem.id];
               delete remoteItem.id;
               delete lookupTbl[localItem.id];
