@@ -59,7 +59,7 @@ Nova.services.db.DBSync =  (function(){
 				console.log("sync all start");
 				var tmpEntityList = window.syncEntityList.concat([]);
 				async.each(tmpEntityList,function(item,eachCallback){
-					item.syncAll(persistence.sync.preferRemoteConflictHandler, function() {
+					item.syncAll(persistence.sync.preferLocalConflictHandler, function() {
 						console.log("sync success",item.meta.name);
 						eachCallback();
 						console.log(window.syncEntityList.length);

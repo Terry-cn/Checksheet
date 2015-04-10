@@ -425,18 +425,33 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                             }else{
                                 async.series([
                                         function(callback){
-                                            async.each($scope.model.results,function(currentResult,cb){
-                                                DB.getCheckSheetResult(dbModel.assetchecksheet,dbModel.resultId,function(itemResults){
-                                                    dbModel.assetchecksheet.items.forEach(function(item,index){
-                                                        var i = index + 1;
-                                                        itemResults["criteria_"+i] = item.result;
-                                                        itemResults["criteria_"+i+"_comment"] = item.result;
-                                                    });
-                                                    cb(null);
-                                                });
+                                            // async.each($scope.model.results,function(currentResult,cb){
+                                            //     console.log(currentResult);
+                                            //     //DB.getCheckSheetResult(dbModel.assetchecksheet,dbModel.resultId,function(itemResults){
+                                            //             var i = 1;
+                                            //             dbModel.assetchecksheet.items.list(function(item){
+                                            //                 //debugger;
+                                                            
+                                            //                 itemResults["criteria_"+i] = item.result;
+                                            //                 itemResults["criteria_"+i+"_comment"] = item.result;
+                                            //                 i++;
+                                            //             });
+                                            //             cb(null);
+                                                  
+                                            //     //});
                                                 
-                                            },function(err){
-                                                callback(null);
+                                            // },function(err){
+                                            //     callback(null);
+                                            // });
+                                            DB.getCheckSheetResult(dbModel.assetchecksheet,dbModel.resultId,function(itemResults){
+                                                for(var i=1;i<=$scope.model.results.length;i++){
+                                                    var item = $scope.model.results[i-1];
+                                                    itemResults["criteria_"+i] = item.result;
+                                                    itemResults["criteria_"+i+"_comment"] = item.comment;
+                                                }
+                                                persistence.flush(tx, function() {
+                                                    callback(null);
+                                                });
                                             });
                                         },
                                         function(callback){
@@ -479,7 +494,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                                 console.log('update flush time:',new Date());
                                                 myNavigator.popPage();
                                             });
-                                        },1000);
+                                        },500);
                                         
                                 });
                                 
@@ -549,6 +564,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
             };
             
             dbModel.assetchecksheet.items.list(function(items){
+                console.log('oooooooooo',items);
                 DB.getCheckSheetResult(assetchecksheet,dbModel.resultId,function(result){
                     if(result){
                         for(var i=0;i<items.length;i++){
