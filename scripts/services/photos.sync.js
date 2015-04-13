@@ -40,6 +40,13 @@ Nova.services.PhotosSync =  (function(){
 								
 								var url = encodeURI(config.remoteAddress + "/Uploads/Save/"+photo.id);
 								console.log("photoEntry success:",photoEntry.nativeURL,url);
+
+								var options = new FileUploadOptions();
+								options.fileKey = "file";
+								options.fileName = photoEntry.nativeURL.substr(photoEntry.nativeURL.lastIndexOf('/') + 1);
+								options.mimeType = "text/plain";
+
+
 								ft.upload(photo.path, url, 
 									function(r){ 
 										console.log("upload success:");
