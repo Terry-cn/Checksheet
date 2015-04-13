@@ -297,25 +297,29 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                    if (typeof comment.images == 'undefined') comment.images = [];
                     
                     console.log("takePhotos ",path);
-                    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-                        path = path.substring(7);
-                        console.log("requestFileSystem加载完毕",fileSystem);
-                        console.log(fileSystem.root.name,path);  
+                     window.resolveLocalFileSystemURI(path, function (fileEntry) {
+                        console.log("resolveLocalFileSystemURI ",fileEntry);
+                        fileEntry.moveTo(file.appDir, fileEntry.name, successCallback,errorCallback);
+                     });
+                    //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
+                        // path = path.substring(7);
+                        // console.log("requestFileSystem加载完毕",fileSystem);
+                        // console.log(fileSystem.root.name,path);  
 
-                        fileSystem.root.getFile(path,null,function(photoEntry){
-                            console.log(photoEntry.fullPath);
-                            photoEntry.copyTo(cordova.file.dataDirectory,defectPhoto.id+'.jpg',
-                                successCallback, 
-                                errorCallback);
+                        // fileSystem.root.getFile(path,null,function(photoEntry){
+                        //     console.log(photoEntry.fullPath);
+                        //     photoEntry.copyTo(cordova.file.dataDirectory,defectPhoto.id+'.jpg',
+                        //         successCallback, 
+                        //         errorCallback);
                              
-                        },function(evt){
-                            console.log("读取文件失败",evt.target.error.code);
-                        });
+                        // },function(evt){
+                        //     console.log("读取文件失败",evt.target.error.code);
+                        // });
                         
                         function successCallback(entry){
 
                             comment.images.push({'path':entry.fullPath});
-
+                             console.log("moveTo ",entry);
                             if(!$scope.isInsert && typeof comment.id != 'undefined'){
                                 var defectPhoto = new DefectPhotos({
                                     created: new Date(),
@@ -342,7 +346,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                         function errorCallback(fileError){
                             console.log("copy photo error",fileError);
                         };
-                    });
+                    //});
                    
                     
                 })
