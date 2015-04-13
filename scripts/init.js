@@ -296,10 +296,11 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                 $scope.$apply(function(){
                    if (typeof comment.images == 'undefined') comment.images = [];
                     
-                    console.log("takePhotos ",path);
-                     window.resolveLocalFileSystemURI(path, function (fileEntry) {
-                        console.log("resolveLocalFileSystemURI ",fileEntry);
-                        fileEntry.moveTo(file.appDir, fileEntry.name, successCallback,errorCallback);
+                    console.log("takePhotos ",path,device.platform,cordova.file);
+                     window.resolveLocalFileSystemURL(path, function (fileEntry) {
+                        console.log("resolveLocalFileSystemURL ",fileEntry);
+                        var dataDirectory = (device.platform =="iPhone") ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
+                        fileEntry.moveTo(dataDirectory, fileEntry.name, successCallback,errorCallback);
                      });
                     //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
                         // path = path.substring(7);
