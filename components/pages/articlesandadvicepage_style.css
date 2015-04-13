@@ -1,0 +1,130 @@
+﻿.text-input {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  vertical-align: top;
+  outline: none;
+  line-height: 1;
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 17px;
+  letter-spacing: 0;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #fff;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #1f1f21;
+  padding: 4px 8px 0 8px;
+  margin: 0;
+  font-size: 15px;
+  height: 31px;
+  font-weight: 400;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.text-input::-webkit-input-placeholder,
+.text-input::-moz-placeholder,
+.text-input::-ms-input-placeholder {
+  color: #999;
+}
+.text-input:disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+.text-input:disabled::-webkit-input-placeholder,
+.text-input:disabled::-moz-placeholder,
+.text-input:disabled:-ms-input-placeholder {
+  color: #999;
+}
+.text-input:invalid {
+  border: 1px solid #ddd;
+  color: #1f1f21;
+} 
+  
+
+.articlesAndAd_Logo {
+     display: inline-block;
+     float: right;
+     width: 40px;
+     height: 40px;
+     padding: 0;
+     margin: 0;
+ }
+ #articlesAndAd_title {
+     font-size: 11px;
+     text-align: center;
+     font-weight: bold;
+     width: 70%;
+   
+ }
+ #articlesAndAd_right,#articlesAndAd_bars {
+     width: 15%;
+ }
+ 
+ #articlesAndAd_Container {
+     width: 94%;
+     margin: auto;
+ }
+  #articlesAndAd_Container .briefContent {
+      margin-top: 5px;
+      margin-bottom: 10px;
+font-size: 14px;
+line-height: 18px;
+  }
+  #articlesAndAd_Container  .articlesAndAd_mainCon {
+      width: 100%;
+      clear: both;
+       margin: 10px 0 0 0;
+      padding: 0;
+   }
+  #articlesAndAd_Container  .articlesAndAd_lrContainer {
+      vertical-align: middle;
+      margin-top: 5px;
+      margin-bottom:  15px;
+      font-size: 14px;
+      width: 100%;
+  }
+ #articlesAndAd_Container .articlesAndAd_briefC {
+     width: 100%;
+     text-align: left;
+     margin-bottom: 7px;
+ }
+ 
+  #articlesAndAd_Container  .articlesAndAd_save {
+      margin: 30px auto;
+      text-align: center;
+  }
+   #articlesAndAd_Container  .articlesAndAd_btnSave {
+      text-align: center;
+       width: 120px;
+   }
+  #articlesAndAd_Container .articlesAndAd_selecteL {
+       width: 120px;
+      height: 30px;
+      }
+    #articlesAndAd_Container .inputMessageArea {
+     width: 100%;
+     text-align: left;
+    }
+   #articlesAndAd_Container #areaChangeCols {
+       width: 85%;
+    }
+    #articlesAndAd_Container  #checkBoxdiv {
+        height: 70px;
+        margin-bottom: 0;    
+      }

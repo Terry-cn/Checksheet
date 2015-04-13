@@ -1,0 +1,38 @@
+ <ul class="list list--inset general-info">
+    <li class="list__item" ng-disabled="!isInsert">
+        <span>Employee</span>
+        <span><input type="text" class="text-input--underbar"  ng-model="model.employee" ng-readonly="!isInsert"> </span>
+    </li>
+    <li class="list__item">
+        <span>Date</span>
+        <span><input type="date" class="text-input--underbar"  ng-model="model.add_date" ng-readonly="!isInsert"> </span>
+    </li>
+    <li class="list__item">
+        <span>Time</span>
+        <span><input type="time" class="text-input--underbar"  ng-model="model.add_date" step="2" ng-readonly="!isInsert"> </span>
+    </li>
+    <li class="list__item list__item--chevron" ng-click="townClicked()" >
+        <span>Town</span>
+        <span>{{model.town.name}}</span>
+    </li>
+    <li class="list__item list__item--chevron" ng-click="siteClicked()" ng-hide="!townSelected">
+        <span>Site</span>
+        <span>{{model.site.name}}</span>
+    </li>
+    <li class="list__item list__item--chevron" ng-click="addressClicked()"  ng-hide="!siteSelected">
+        <span>Address</span>
+        <span>{{model.address.name}}</span>
+    </li>
+    <li class="list__item list__item--chevron"  ng-click="assetClicked()" ng-hide="!addressSelected">
+        <span>Asset</span>
+        <span>{{model.asset.name}}</span>
+    </li>
+    <li class="list__item list__item--chevron"  ng-click="assetCheckSheetClicked()" ng-hide="!assetSelected">
+        <span>Asset Check Sheet</span>
+        <span>{{model.sheet.name}}</span>
+    </li>
+    <li class="list__item" ng-hide="!sheetSelected">
+        <span></span>
+        <span> <button class="button button--outline"  ng-click="next()" style="margin:20px 0;">Checking List</button></span>
+    </li>
+</ul>
