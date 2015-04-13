@@ -40,9 +40,7 @@
     <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
     <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,root" />
-    <preference name="iosPersistentFileLocation" value="Library" />
-    <preference name="iosPersistentFileLocation" value="Compatibility" />
-    
+
     <gap:platform name="ios" />
     <gap:platform name="android" />
 
