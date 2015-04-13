@@ -295,46 +295,51 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                
                 $scope.$apply(function(){
                    if (typeof comment.images == 'undefined') comment.images = [];
-                    comment.images.push({'path':path});
+                    
                     console.log("takePhotos ",path);
-                   if(!$scope.isInsert && typeof comment.id != 'undefined'){
-                        var defectPhoto = new DefectPhotos({
-                            created: new Date(),
-                            path:path,
-                            status:0
+                    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
+                        fileSystem.root.getFile(path,null,function(photoEntry){
+                            console.log(photoEntry.localURL);
+                            photoEntry.copyTo(cordova.file.dataDirectory,defectPhoto.id+'.jpg',
+                                successCallback, 
+                                errorCallback);
+                             
+                        },function(evt){
+                            console.log(evt.target.error.code);
                         });
-                        comment.photos.add(defectPhoto);
-                        console.log("add defectPhoto!");
-                        persistence.flush(function(){
-                            console.log("add defectPhoto success!");
-                             //remove to cordova.file.dataDirectory
-                            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-                                fileSystem.root.getFile(path,null,function(photoEntry){
-                                    console.log(photoEntry.localURL);
-                                    photoEntry.copyTo(cordova.file.dataDirectory,defectPhoto.id+'.jpg',
-                                        successCallback, 
-                                        errorCallback);
-                                     
-                                },function(evt){
-                                    console.log(evt.target.error.code);
+                        
+                        function successCallback(entry){
+                            
+                            comment.images.push({'path':entry.fullPath});
+
+                            if(!$scope.isInsert && typeof comment.id != 'undefined'){
+                                var defectPhoto = new DefectPhotos({
+                                    created: new Date(),
+                                    path:entry.fullPath,
+                                    status:0
                                 });
-                                
-                                function successCallback(entry){
-                                    console.log("copy photo success",entry.localURL);
-                                    ons.notification.alert({
-                                        message:cordova.file.dataDirectory
-                                    });
-                                     ons.notification.alert({
-                                        message:entry.localURL 
-                                    });
-                                    console.log(entry);
-                                };
-                                function errorCallback(fileError){
-                                    console.log("copy photo error",fileError);
-                                };
+                                comment.photos.add(defectPhoto);
+                                console.log("add defectPhoto!");
+                                persistence.flush(function(){
+                                    console.log("add defectPhoto success!");
+                                     //remove to cordova.file.dataDirectory
+                                    
+                                });
+                           }
+                            console.log("copy photo success",entry.fullPath);
+                            ons.notification.alert({
+                                message:cordova.file.dataDirectory
                             });
-                        });
-                    }
+                             ons.notification.alert({
+                                message:entry.fullPath
+                            });
+                            console.log(entry);
+                        };
+                        function errorCallback(fileError){
+                            console.log("copy photo error",fileError);
+                        };
+                    });
+                   
                     
                 })
                             }
