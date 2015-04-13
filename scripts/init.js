@@ -306,9 +306,9 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                             fs.root.getDirectory(dataDirectory, {}, function(dirEntry) {
                                 console.log("START moveTo ",fs,dirEntry);
                                 fileEntry.moveTo(dirEntry, fileEntry.name, successCallback,errorCallback);
-                            }, errorHandler);
+                            }, errorCallback);
                           
-                        }, errorHandler);
+                        }, errorCallback);
                         
                      });
                     //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
