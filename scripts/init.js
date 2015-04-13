@@ -300,7 +300,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                         // console.log("parentEntry ",parentEntry);
                         window.requestFileSystem(LocalFileSystem.PERSISTENT, 1024*1024, function(fs) {
                             fs.root.getDirectory("files", {create:true}, function(dirEntry) {
-                                fileEntry.moveTo(dirEntry, fileEntry.name, successCallback,errorCallback);
+                                fileEntry.moveTo(dirEntry, persistence.createUUID()+'.jpg', successCallback,errorCallback);
                             }, function(getDirectoryError){
                                  console.log("getDirectoryError",getDirectoryError);
                             });
