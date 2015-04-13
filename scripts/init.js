@@ -299,8 +299,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                     console.log("takePhotos ",path);
                     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
                         path = path.substring(7);
-                        console.log("requestFileSystem加载完毕");
-                        console.log(fileSystem.name,fileSystem.root.getFile);  
+                        console.log("requestFileSystem加载完毕",fileSystem);
                         console.log(fileSystem.root.name,path);  
 
                         fileSystem.root.getFile(path,null,function(photoEntry){
