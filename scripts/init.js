@@ -298,7 +298,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                     
                     console.log("takePhotos ",path);
                     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-                        
+                        path = path.substring(7);
                         console.log("requestFileSystem加载完毕");
                         console.log(fileSystem.name);  
                         console.log(fileSystem.root.name);  
@@ -310,7 +310,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                 errorCallback);
                              
                         },function(evt){
-                            console.log(evt.target.error.code);
+                            console.log("读取文件失败",evt.target.error.code);
                         });
                         
                         function successCallback(entry){
