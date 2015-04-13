@@ -298,8 +298,13 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                     
                     console.log("takePhotos ",path);
                     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
+                        
+                        console.log("requestFileSystem加载完毕");
+                        console.log(fileSystem.name);  
+                        console.log(fileSystem.root.name);  
+
                         fileSystem.root.getFile(path,null,function(photoEntry){
-                            console.log(photoEntry.localURL);
+                            console.log(photoEntry.fullPath);
                             photoEntry.copyTo(cordova.file.dataDirectory,defectPhoto.id+'.jpg',
                                 successCallback, 
                                 errorCallback);
@@ -309,7 +314,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                         });
                         
                         function successCallback(entry){
-                            
+
                             comment.images.push({'path':entry.fullPath});
 
                             if(!$scope.isInsert && typeof comment.id != 'undefined'){
