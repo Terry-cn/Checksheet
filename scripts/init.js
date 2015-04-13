@@ -332,13 +332,14 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                         // });
                         
                         function successCallback(entry){
+                            //nativeURL: "file:///var/mobile/Applications/8AB3CE37-2461-48D5-A968-3C471C7D58D1/Documents/files/cdv_photo_001.j…"
 
-                            comment.images.push({'path':entry.fullPath});
+                            comment.images.push({'path':entry.nativeURL});
                             console.log("moveTo ",entry);
                             if(!$scope.isInsert && typeof comment.id != 'undefined'){
                                 var defectPhoto = new DefectPhotos({
                                     created: new Date(),
-                                    path:entry.fullPath,
+                                    path:entry.nativeURL,
                                     status:0
                                 });
                                 comment.photos.add(defectPhoto);
@@ -349,13 +350,6 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                     
                                 });
                            }
-                            console.log("copy photo success",entry.fullPath);
-                            ons.notification.alert({
-                                message:cordova.file.dataDirectory
-                            });
-                             ons.notification.alert({
-                                message:entry.fullPath
-                            });
                             console.log(entry);
                         };
                         function errorCallback(fileError){
