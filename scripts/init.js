@@ -299,11 +299,12 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                     console.log("takePhotos ",path,device.platform,cordova.file);
                      window.resolveLocalFileSystemURL(path, function (fileEntry) {
                         console.log("resolveLocalFileSystemURL ",fileEntry);
-                        var dataDirectory = (device.platform =="iOS") ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
+                        //var dataDirectory = (device.platform =="iOS") ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
                         // parentEntry = new DirectoryEntry({fullPath: dataDirectory});
                         // console.log("parentEntry ",parentEntry);
                         window.requestFileSystem(LocalFileSystem.PERSISTENT, 1024*1024, function(fs) {
-                            fs.root.getDirectory(dataDirectory, {}, function(dirEntry) {
+                            console.log("requestFileSystem ",fs);
+                            fs.root.getDirectory("files", {create:true}, function(dirEntry) {
                                 console.log("START moveTo ",fs,dirEntry);
                                 fileEntry.moveTo(dirEntry, fileEntry.name, successCallback,errorCallback);
                             }, function(getDirectoryError){
