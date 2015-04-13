@@ -37,8 +37,8 @@ Nova.services.PhotosSync =  (function(){
 					try{
 						var ft = new FileTransfer();
 						window.resolveLocalFileSystemURL(photo.path, function (photoEntry) {
-								console.log("photoEntry success:",photoEntry.fullPath);
-								ft.upload(photo.path, encodeURI(config.remoteAddress + "/uploads/save?photo="+photo.id), 
+								console.log("photoEntry success:",photoEntry.nativeURL);
+								ft.upload(photo.path, encodeURI(config.remoteAddress + "/Uploads/Save/"+photo.id), 
 									function(r){ 
 										console.log("upload success:");
 										photo.status = 1;
@@ -60,11 +60,11 @@ Nova.services.PhotosSync =  (function(){
 								fileTransfer.download(config.remoteAddress+photo.path,
 									newPath,
 									function(entry){
-										console.log("download success:"+entry.fullPath);
-										photo.path = entry.fullPath;
+										console.log("download success:"+entry.nativeURL);
+										photo.path = entry.nativeURL;
 										photo.status = 1;
 										 persistence.flush(function(){
-										 	console.log("download success:",entry.fullPath,photo.id);
+										 	console.log("download success:",entry.nativeURL,photo.id);
 										 	callback(null);
 										 });
 									},
