@@ -36,10 +36,7 @@ Nova.services.PhotosSync =  (function(){
 					console.log("each sync");
 					try{
 						var ft = new FileTransfer();
-						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-							fileSystem.root.getFile(path,null,
-							//read file success upload file
-							function(photoEntry){
+						window.resolveLocalFileSystemURL(path, function (photoEntry) {
 								console.log("photoEntry success:",photoEntry.fullPath);
 								ft.upload(photo.path, encodeURI(config.remoteAddress + "/uploads/save?photo="+photo.id), 
 									function(r){ 
@@ -79,7 +76,6 @@ Nova.services.PhotosSync =  (function(){
 									{}
 								);
 							});
-						});
 				
 					}catch(e){
 						console.log("requestFileSystem err:",e);
