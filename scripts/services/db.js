@@ -24,7 +24,6 @@ Nova.services.db.prototype.getSyncPhotos = function(callback){
 
     var photos = DefectPhotos.all()
     .filter('status','=',0)
-    //.and(new persistence.PropertyFilter('_lastChange', '>', syncResult.localDate))
     .limit(5);
     photos.list(null,function(result){
         console.log("get photos success:",result);
