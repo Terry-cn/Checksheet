@@ -292,20 +292,14 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
         $scope.takePhotos = function(comment){
 
              var TakePhotoCompleted = function(path) {
-               
-                $scope.$apply(function(){
-                   if (typeof comment.images == 'undefined') comment.images = [];
                     
                     console.log("takePhotos ",path,device.platform,cordova.file);
-                     window.resolveLocalFileSystemURL(path, function (fileEntry) {
-                        console.log("resolveLocalFileSystemURL ",fileEntry);
+                    window.resolveLocalFileSystemURL(path, function (fileEntry) {
                         //var dataDirectory = (device.platform =="iOS") ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
                         // parentEntry = new DirectoryEntry({fullPath: dataDirectory});
                         // console.log("parentEntry ",parentEntry);
                         window.requestFileSystem(LocalFileSystem.PERSISTENT, 1024*1024, function(fs) {
-                            console.log("requestFileSystem ",fs);
                             fs.root.getDirectory("files", {create:true}, function(dirEntry) {
-                                console.log("START moveTo ",fs,dirEntry);
                                 fileEntry.moveTo(dirEntry, fileEntry.name, successCallback,errorCallback);
                             }, function(getDirectoryError){
                                  console.log("getDirectoryError",getDirectoryError);
@@ -333,9 +327,10 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                         
                         function successCallback(entry){
                             //nativeURL: "file:///var/mobile/Applications/8AB3CE37-2461-48D5-A968-3C471C7D58D1/Documents/files/cdv_photo_001.j…"
-
-                            comment.images.push({'path':entry.nativeURL});
-                            console.log("moveTo ",entry);
+                            $scope.$apply(function(){
+                                if (typeof comment.images == 'undefined') comment.images = [];
+                                comment.images.push({'path':entry.nativeURL});
+                            });
                             if(!$scope.isInsert && typeof comment.id != 'undefined'){
                                 var defectPhoto = new DefectPhotos({
                                     created: new Date(),
@@ -358,8 +353,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                     //});
                    
                     
-                })
-                            }
+            }
             var onFail = function(message){
                 ons.notification.alert({
                     message:message
