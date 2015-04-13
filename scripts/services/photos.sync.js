@@ -37,8 +37,10 @@ Nova.services.PhotosSync =  (function(){
 					try{
 						var ft = new FileTransfer();
 						window.resolveLocalFileSystemURL(photo.path, function (photoEntry) {
-								console.log("photoEntry success:",photoEntry.nativeURL);
-								ft.upload(photo.path, encodeURI(config.remoteAddress + "/Uploads/Save/"+photo.id), 
+								
+								var url = encodeURI(config.remoteAddress + "/Uploads/Save/"+photo.id);
+								console.log("photoEntry success:",photoEntry.nativeURL,url);
+								ft.upload(photo.path, url, 
 									function(r){ 
 										console.log("upload success:");
 										photo.status = 1;
@@ -55,10 +57,11 @@ Nova.services.PhotosSync =  (function(){
 
 							// read file failed download file
 							},function(evt){
-								console.log("photoEntry fail:",evt);
-								var newPath  = cordova.file.dataDirectory +'/'+ defectPhoto.id+'.jpg' ;
-								fileTransfer.download(config.remoteAddress+photo.path,
-									newPath,
+								
+								var url = encodeURI(config.remoteAddress+"/Files/"+photo.id);
+								console.log("photoEntry fail:",evt,url);
+								ft.download(url,
+									photo.path,
 									function(entry){
 										console.log("download success:"+entry.nativeURL);
 										photo.path = entry.nativeURL;
