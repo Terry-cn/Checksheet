@@ -298,7 +298,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                     
                     console.log("takePhotos ",path,device.platform,cordova.file);
                      window.resolveLocalFileSystemURL(path, function (fileEntry) {
-                        console.log("resolveLocalFileSystemURL ",fileEntry,file);
+                        console.log("resolveLocalFileSystemURL ",fileEntry);
                         var dataDirectory = (device.platform =="iOS") ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
                         // parentEntry = new DirectoryEntry({fullPath: dataDirectory});
                         // console.log("parentEntry ",parentEntry);
