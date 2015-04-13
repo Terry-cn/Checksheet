@@ -301,6 +301,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                         console.log("resolveLocalFileSystemURL ",fileEntry);
                         var dataDirectory = (device.platform =="iOS") ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
                         parentEntry = new DirectoryEntry({fullPath: dataDirectory});
+                        console.log("parentEntry ",parentEntry);
                         fileEntry.moveTo(parentEntry, fileEntry.name, successCallback,errorCallback);
                      });
                     //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
@@ -321,7 +322,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                         function successCallback(entry){
 
                             comment.images.push({'path':entry.fullPath});
-                             console.log("moveTo ",entry);
+                            console.log("moveTo ",entry);
                             if(!$scope.isInsert && typeof comment.id != 'undefined'){
                                 var defectPhoto = new DefectPhotos({
                                     created: new Date(),
