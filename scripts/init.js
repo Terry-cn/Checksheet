@@ -449,7 +449,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                             var photo = new DefectPhotos({
                                                 created: new Date(),
                                                 path:comment.images[j].path,
-                                                status:1
+                                                status:0
                                             });
                                             def.photos.add(photo);
                                         }
