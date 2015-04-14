@@ -49,13 +49,11 @@ Nova.services.PhotosSync =  (function(){
 
 								ft.upload(photo.path, url, 
 									function(r){ 
-										console.log("upload success:");
 										photo.status = 1;
-										 persistence.flush(function(){
+										persistence.flush(function(){
 										 	console.log("upload success:",photo.id);
-										 	callback(null);
+										 	win(r,callback);
 										 });
-										win(r,callback);
 									},
 									function(error){
 										console.log("upload fail:");
