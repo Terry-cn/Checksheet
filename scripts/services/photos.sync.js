@@ -63,7 +63,7 @@ Nova.services.PhotosSync =  (function(){
 							// read file failed download file
 							},function(evt){
 								
-								var url = encodeURI(config.remoteAddress+"/Files/"+photo.id);
+								var url = encodeURI(config.remoteAddress+"/Files/Photo/"+photo.id);
 								console.log("photoEntry fail:",evt,url);
 								ft.download(url,
 									photo.path,
