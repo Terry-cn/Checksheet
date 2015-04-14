@@ -2,6 +2,7 @@
 var module = ons.bootstrap('Nova', ['onsen']);
 var DB = new Nova.services.db();
 var dbSync = new Nova.services.db.DBSync(Nova.config);
+var photoSync = new Nova.services.PhotosSync(Nova.config);
 //persistence.typeMapper.idType ="INT";
 var getServerURL = function(url){
     return Nova.config.remoteAddress + (url.indexOf('/') == 0? url : '/'+url);
@@ -55,6 +56,7 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
                 ajaxOption.headers.Authorization = data.token_type + ' '+data.access_token;
                 localStorage.setItem('Authorization',ajaxOption.headers.Authorization);
                 dbSync.startSync($http,ajaxOption,$rootScope);
+                photoSync.startSync();
                 // ons.notification.alert({
                 //     message:data.access_token
                 // });
@@ -97,6 +99,7 @@ module.controller('ChecksheetListController',['$scope','$http','$templateCache',
 
         $scope.syncOff = function(){
             dbSync.stopSync();
+            photoSync.stopSync();
         }
 }]);
 
@@ -289,21 +292,68 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
         $scope.takePhotos = function(comment){
 
              var TakePhotoCompleted = function(path) {
-                $scope.$apply(function(){
-                   if (typeof comment.images == 'undefined') comment.images = [];
-                    comment.images.push({'path':path});
-
-                   if(!$scope.isInsert && typeof comment.id != 'undefined'){
-                        comment.photos.add(new DefectPhotos({
-                            created: new Date(),
-                            path:path,
-                            status:1
-                        }));
-                        persistence.flush();
-                    }
                     
-                })
-                            }
+                    console.log("takePhotos ",path,device.platform,cordova.file);
+                    window.resolveLocalFileSystemURL(path, function (fileEntry) {
+                        //var dataDirectory = (device.platform =="iOS") ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
+                        // parentEntry = new DirectoryEntry({fullPath: dataDirectory});
+                        // console.log("parentEntry ",parentEntry);
+                        window.requestFileSystem(LocalFileSystem.PERSISTENT, 1024*1024, function(fs) {
+                            fs.root.getDirectory("files", {create:true}, function(dirEntry) {
+                                fileEntry.moveTo(dirEntry, persistence.createUUID()+'.jpg', successCallback,errorCallback);
+                            }, function(getDirectoryError){
+                                 console.log("getDirectoryError",getDirectoryError);
+                            });
+                          
+                        } , function(fsError){
+                                 console.log("fsError",fsError);
+                            });
+                        
+                     });
+                    //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
+                        // path = path.substring(7);
+                        // console.log("requestFileSystem加载完毕",fileSystem);
+                        // console.log(fileSystem.root.name,path);  
+
+                        // fileSystem.root.getFile(path,null,function(photoEntry){
+                        //     console.log(photoEntry.fullPath);
+                        //     photoEntry.copyTo(cordova.file.dataDirectory,defectPhoto.id+'.jpg',
+                        //         successCallback, 
+                        //         errorCallback);
+                             
+                        // },function(evt){
+                        //     console.log("读取文件失败",evt.target.error.code);
+                        // });
+                        
+                        function successCallback(entry){
+                            //nativeURL: "file:///var/mobile/Applications/8AB3CE37-2461-48D5-A968-3C471C7D58D1/Documents/files/cdv_photo_001.j…"
+                            $scope.$apply(function(){
+                                if (typeof comment.images == 'undefined') comment.images = [];
+                                comment.images.push({'path':entry.nativeURL});
+                            });
+                            if(!$scope.isInsert && typeof comment.id != 'undefined'){
+                                var defectPhoto = new DefectPhotos({
+                                    created: new Date(),
+                                    path:entry.nativeURL,
+                                    status:0
+                                });
+                                comment.photos.add(defectPhoto);
+                                console.log("add defectPhoto!");
+                                persistence.flush(function(){
+                                    console.log("add defectPhoto success!");
+                                     //remove to cordova.file.dataDirectory
+                                    
+                                });
+                           }
+                            console.log(entry);
+                        };
+                        function errorCallback(fileError){
+                            console.log("copy photo error",fileError);
+                        };
+                    //});
+                   
+                    
+            }
             var onFail = function(message){
                 ons.notification.alert({
                     message:message
@@ -323,10 +373,19 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                     saveToPhotoAlbum : true
                 });
             }catch(exp){
-                console.log(exp);
+                console.log(exp,comment);
                 if (typeof comment.images == 'undefined') 
                     comment.images = [];
                 comment.images.push({'path':'images/log.png'});
+
+                var defectPhoto = new DefectPhotos({
+                    created: new Date(),
+                    path:'images/log.png',
+                    status:0
+                });
+                comment.photos.add(defectPhoto);
+                console.log("add defectPhoto!");
+                persistence.flush();
             }
            
         }
@@ -406,7 +465,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                             var photo = new DefectPhotos({
                                                 created: new Date(),
                                                 path:comment.images[j].path,
-                                                status:1
+                                                status:0
                                             });
                                             def.photos.add(photo);
                                         }

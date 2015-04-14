@@ -38,21 +38,10 @@ Nova.services.db.DBSync =  (function(){
 		var remoteAddress = appConfig.remoteAddress;
 		var dbServices = new Nova.services.db();
 		var syncTimer = {};
+		window.firstSync = true;
 		//http://stage.iiuk.homeip.net/Pages/Healthboard_App/webservice.php?type=2&id=[uuid]&os=8.1&device=iphone6s&version=1.0&last_content_synced=2013-12-12
 		this.startSync = function($http,ajaxOption,$rootScope){
-			
-			window.syncEntityList.push(Towns);
-			window.syncEntityList.push(Sites);
-			window.syncEntityList.push(Assets);
-			window.syncEntityList.push(Locations);
-			window.syncEntityList.push(AssetCheckSheets);
-			window.syncEntityList.push(AssetCheckSheetItems);
-			window.syncEntityList.push(CheckSheets);
-			window.syncEntityList.push(Defects);
-			window.syncEntityList.push(DefectPhotos);
-			persistence.sync.initExistsTableSync(function(){
-				runSync(runSync);
-			});
+
 
 
 			var runSync = function(callback){
@@ -60,9 +49,9 @@ Nova.services.db.DBSync =  (function(){
 				var tmpEntityList = window.syncEntityList.concat([]);
 				async.each(tmpEntityList,function(item,eachCallback){
 					item.syncAll(persistence.sync.preferLocalConflictHandler, function() {
-						console.log("sync success",item.meta.name);
+						//console.log("sync success",item.meta.name);
 						eachCallback();
-						console.log(window.syncEntityList.length);
+						//console.log(window.syncEntityList.length);
 					}, function(){
 						console.log("sync normal",item.meta.name);
 						eachCallback();
@@ -73,172 +62,35 @@ Nova.services.db.DBSync =  (function(){
 				},function(err){
 					console.log("sync timer start");
 					$rootScope.$broadcast('refreshCheckList');
-					setTimeout(function(){
+					persistence.sync.syncTimer = setTimeout(function(){
 						runSync(callback);
 					},Nova.config.syncTime);
 				})
 			}
-			
+			if(window.firstSync){
+				window.firstSync = false;
+				window.syncEntityList.push(Towns);
+				window.syncEntityList.push(Sites);
+				window.syncEntityList.push(Assets);
+				window.syncEntityList.push(Locations);
+				window.syncEntityList.push(AssetCheckSheets);
+				window.syncEntityList.push(AssetCheckSheetItems);
+				window.syncEntityList.push(CheckSheets);
+				window.syncEntityList.push(Defects);
+				window.syncEntityList.push(DefectPhotos);
+				persistence.sync.initExistsTableSync(function(){
+					runSync(runSync);
+				});
+			}else{
+				runSync(runSync);
+			}
 
 		}
 		this.stopSync = function(){
-			for(var item in persistence.sync.syncTimer){
-				console.log('clear timer '+item+';')
-				clearTimeout(persistence.sync.syncTimer[item]);
-			}
-		}
-		this.syncLocations = function($http,ajaxOption){
-			
-			async.waterfall([
-					function(callback){
-						$http.post(remoteAddress + '/api/Options/Location',{
-							lastSync:'2015-01-02',
-							Identity:0
-						},ajaxOption).success(function(data){
-							callback(null,data);
-						})
-					},function(callback,locations){
-						async.each(locations,function(item,callback){
-
-						},function(err){
-							callback(null);
-						});
-					}
-				],function(err){
-
-				console.log('pause syncLocations',new Date());
-				syncTimer.location = setTimeout(function(err){
-					console.log('start syncLocations',new Date());
-					syncLocations($http);
-				},30000);
-			})
+			console.log('clear timer ;');
+			clearTimeout(persistence.sync.syncTimer);
 		}
 
-		this.syncMessage = function(callback,tx){
-				async.waterfall([
-						function(callback){
-							dbServices.getTableLastUpdateTime('messages',function(err,result){
-								var requestData = Request('messages',Nova.user,getLastModified(result));
-								var url = remoteAddress+'/webservice.php?'+ decodeURIComponent($.param(requestData));
-								callback(null,url);
-							});
-						},
-						function(url,callback){
-							$.getJSON(url,function(result){
-								callback(null,result);
-							});
-						},
-						function(result,callback){
-							if(result.response == 1){    
-								var lastModified;
-								async.each(result.content,function(_message,callback){
-									try{
-										dbServices.setMessage(true,_message,callback);
-									}catch(err){
-										callback(err);
-									}
-								},function(err){
-									callback(null,result.content.length,result.last_content_synced);
-								});
-							}else{
-								callback(null,0,result.last_content_synced);
-							}
-						},function(affectCount,lastModified,callback){
-							dbServices.setTableLastUpdateTime(true,'messages',lastModified,function(err,result){
-								console.log('updated messages last_content_synced');
-								callback(false,result,affectCount);
-							})
-						}
-					],function(err,result){
-						if(err){
-							console.log(err,result);
-						}else{
-							function syncSuccess(){
-								console.log("Sync messages success.");
-								dbServices.getLatestActiveMessage(function(err,messsage){
-									console.log(messsage);
-									if(messsage){
-										Nova.notification.alert(messsage.content,function(){
-											messsage.type = 2;
-											persistence.flush(null,function() {
-												if(callback && typeof callback == 'function') callback(null,result);
-											});
-										},messsage.title);
-									}else{
-										if(callback && typeof callback == 'function') callback(null,result);
-									}
-									
-								});
-							}
-							if(tx || persistence.flushHooks.length == 0){
-								syncSuccess();
-							}else{
-								persistence.flush(null,function() {
-								  syncSuccess();
-								});
-							}
-							
-						}
-				});
-			
-		}
-		this.syncNavigation = function(callback,tx){
-
-				async.waterfall([
-						function(callback){
-							dbServices.getTableLastUpdateTime('navigations',function(err,result){
-								var requestData = Request('navigation',Nova.user,getLastModified(result));
-								var url = remoteAddress+'/webservice.php?'+ decodeURIComponent($.param(requestData));
-								callback(null,url);
-							});
-						},
-						function(url,callback){
-							$.getJSON(url,function(result){
-								callback(false,result)
-							});
-						},
-						function(result,callback){
-							if(result.response == 1){    
-								var lastModified;
-								async.each(result.content,function(navigation,callback){
-									try{
-										dbServices.setNavigation(true,navigation,callback);
-									}catch(err){
-										console.log(err);
-										callback(err);
-									}
-								},function(err){
-									callback(null,result.content.length,result.last_content_synced);
-								});
-							}else{
-								callback(null,0,result.last_content_synced);
-							}
-						},function(affectCount,lastModified,callback){
-							dbServices.setTableLastUpdateTime(true,'navigations',lastModified,function(result){
-								console.log('updated navigations last_content_synced');
-								callback(false,result,affectCount);
-							})
-						}
-					],function(err,result){
-						if(err){
-							console.log(err,result);
-						}else{
-
-							function syncSuccess(){
-								console.log("Sync navigation success.");
-								if(callback && typeof callback == 'function') callback(null,result);
-							}
-							if(tx || persistence.flushHooks.length == 0){
-								syncSuccess();
-							}else{
-								persistence.flush(null,function() {
-								  syncSuccess();
-								});
-							}
-						}
-				});
-			
-		}
 
 		this.runInBackGround = function(callback){
 			var self = this;

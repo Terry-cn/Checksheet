@@ -169,22 +169,22 @@ persistence.sync.postJSON = function(uri, data, callback,errorCallback) {
       }
       persistence.asyncForEach(groupedIds, function(idGroup, next) {
         if(Entity.meta.name == 'checksheets'){
-          console.log(groupedIds,idGroup);
+          //console.log(groupedIds,idGroup);
         }
         Entity.all(session).filter('id', 'in', idGroup).list(function(groupOfExistingItems) {
           if(Entity.meta.name == 'checksheets'){
-            console.log(existingItems,groupOfExistingItems);
+            //console.log(existingItems,groupOfExistingItems);
           }
           existingItems  = existingItems.concat(groupOfExistingItems);
           next();
         });
       }, function() {
           if(Entity.meta.name == 'checksheets'){
-            console.log(existingItems);
+            //console.log(existingItems);
           }
           existingItems.forEach(function(localItem) {
             if(Entity.meta.name == 'checksheets'){
-            console.log(localItem);
+            //console.log(localItem);
           }
               var remoteItem = lookupTbl[localItem.id];
               delete remoteItem.id;

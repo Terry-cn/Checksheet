@@ -24,12 +24,12 @@
     <feature name="http://api.phonegap.com/1.0/contacts" />
     <feature name="http://api.phonegap.com/1.0/file" />
     <feature name="http://api.phonegap.com/1.0/battery" />
-<!--     
+    
     <feature name="debug-server" required="true">
-       <param name="domain" value="http://192.168.1.102:8080"/>
+       <param name="domain" value="http://192.168.191.1:8080"/>
        <param name="key" value="anonymous"/>
     </feature>
-            -->
+           
     <preference name="phonegap-version" value="3.5.0" />     
     <preference name="target-device" value="tablet" />
     <preference name="fullscreen" value="true" />
@@ -38,7 +38,6 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="orientation" value="landscape" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
-
 
     <gap:platform name="ios" />
     <gap:platform name="android" />
@@ -55,6 +54,8 @@
     <gap:plugin name="org.apache.cordova.file" version="1.3.1" />
 <!--     <gap:plugin name="org.apache.cordova.camera" version="0.3.2" /> -->
     <gap:plugin name="org.apache.cordova.core.camera"/>
+    <gap:plugin name="org.apache.cordova.file-transfer" version="0.4.6" />
+
     
     <icon src="icon.png" />
 
