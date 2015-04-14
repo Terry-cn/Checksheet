@@ -77,7 +77,7 @@ Nova.services.PhotosSync =  (function(){
 										 });
 									},
 									function(error){
-										console.log("download fail:");
+										console.log("download fail:",photo);
 										fail(error,callback);
 									}, 
 									false,
