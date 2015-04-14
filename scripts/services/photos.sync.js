@@ -64,25 +64,40 @@ Nova.services.PhotosSync =  (function(){
 							},function(evt){
 								
 								var url = encodeURI(config.remoteAddress+"/Files/Photo/"+photo.id);
-								console.log("photoEntry fail:",evt,url);
-								ft.download(url,
-									photo.path,
-									function(entry){
-										console.log("download success:"+entry.nativeURL);
-										photo.path = entry.nativeURL;
+								
+								window.requestFileSystem(LocalFileSystem.PERSISTENT, 1024*1024, function(fs) {
+		                            fs.root.getDirectory("files", {create:true}, function(dirEntry) {
+
+		                            	console.log("photoEntry fail:",evt,url);
+		                            	photo.path = dirEntry.nativeURL + '/' + persistence.createUUID()+'.jpg';
 										photo.status = 1;
-										 persistence.flush(function(){
-										 	console.log("download success:",entry.nativeURL,photo.id);
-										 	callback(null);
-										 });
-									},
-									function(error){
-										console.log("download fail:",photo);
-										fail(error,callback);
-									}, 
-									false,
-									{}
-								);
+										
+										ft.download(url,
+											photo.path,
+											function(entry){
+												console.log("download success:"+entry.nativeURL);
+												
+												 persistence.flush(function(){
+												 	console.log("download success:",entry.nativeURL,photo.id);
+												 	callback(null);
+												 });
+											},
+											function(error){
+												console.log("download fail:",photo);
+												fail(error,callback);
+											}, 
+											false,
+											{}
+										);
+		                                //fileEntry.moveTo(dirEntry, persistence.createUUID()+'.jpg', successCallback,errorCallback);
+		                            }, function(getDirectoryError){
+		                                 console.log("getDirectoryError",getDirectoryError);
+		                            });
+		                          
+		                        } , function(fsError){
+		                                 console.log("fsError",fsError);
+		                        });
+								
 							});
 				
 					}catch(e){
