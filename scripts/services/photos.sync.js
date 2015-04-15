@@ -18,6 +18,7 @@ Nova.services.PhotosSync =  (function(){
 			console.log("start photo syncs.");
 			var self = obj ? obj : this;
 			this.db.getSyncPhotos(function(error,photos){
+
 				var win = function (r,callback) {
 				    callback(null);
 				}
@@ -28,7 +29,6 @@ Nova.services.PhotosSync =  (function(){
 				}
 				
 				async.each(photos,function(photo,callback){
-					console.log("each sync");
 					try{
 						var ft = new FileTransfer();
 						window.resolveLocalFileSystemURL(photo.path, function (photoEntry) {
@@ -99,6 +99,7 @@ Nova.services.PhotosSync =  (function(){
 						console.log("requestFileSystem err:",e);
 						callback(null);
 					}
+	
 				},function(error){
 					console.log("syncTimer: start",self);
 					self.syncTimer = setTimeout(function(){

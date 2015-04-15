@@ -23,13 +23,43 @@ Nova.services.db.prototype.getTableLastUpdateTime = function(tableName,callback)
 Nova.services.db.prototype.getSyncPhotos = function(callback){
 
     var photos = DefectPhotos.all()
+    .prefetch('defects')
     .filter('status','=',0)
     .limit(5);
     photos.list(null,function(result){
         console.log("get photos success:",result);
         callback(false,result);
     });
-   
+};
+
+Nova.services.db.prototype.getSyncChecksheets = function(callback){
+
+    var checksheets = CheckSheets.all()
+    .filter('status','=',0)
+    .limit(5);
+    checksheets.list(null,function(result){
+        callback(false,result);
+    });
+};
+
+Nova.services.db.prototype.getSyncDefctCount = function(checksheetId,callback){
+
+    var defects = Defects.all()
+    .filter('checksheet','=',checksheetId)
+    .and(new persistence.PropertyFilter('status', '=', 0));
+    defects.count(null,function(num){
+        callback(false,num);
+    });
+};
+
+Nova.services.db.prototype.getSyncPhotoCount = function(defectId,callback){
+
+    var photos = DefectPhotos.all()
+    .filter('defects','=',defectId)
+    .and(new persistence.PropertyFilter('status', '=', 0));
+    photos.count(null,function(num){
+        callback(false,num);
+    });
 };
 
 Nova.services.db.prototype.setTableLastUpdateTime = function(tx,tableName,lastUpdatetime,callback){

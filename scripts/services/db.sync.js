@@ -42,7 +42,7 @@ Nova.services.db.DBSync =  (function(){
 		//http://stage.iiuk.homeip.net/Pages/Healthboard_App/webservice.php?type=2&id=[uuid]&os=8.1&device=iphone6s&version=1.0&last_content_synced=2013-12-12
 		this.startSync = function($http,ajaxOption,$rootScope){
 
-
+			var self  = this;
 
 			var runSync = function(callback){
 				console.log("sync all start");
@@ -64,6 +64,7 @@ Nova.services.db.DBSync =  (function(){
 					$rootScope.$broadcast('refreshCheckList');
 					persistence.sync.syncTimer = setTimeout(function(){
 						runSync(callback);
+						self.startSyncStatus();
 					},Nova.config.syncTime);
 				})
 			}
@@ -80,6 +81,7 @@ Nova.services.db.DBSync =  (function(){
 				window.syncEntityList.push(DefectPhotos);
 				persistence.sync.initExistsTableSync(function(){
 					runSync(runSync);
+
 				});
 			}else{
 				runSync(runSync);
@@ -89,8 +91,42 @@ Nova.services.db.DBSync =  (function(){
 		this.stopSync = function(){
 			console.log('clear timer ;');
 			clearTimeout(persistence.sync.syncTimer);
-		}
+		};
 
+		this.startSyncStatus = function(callback){
+			DB.getSyncChecksheets(function(err,result){
+				console.log("DB.getSyncChecksheets",result);
+				async.each(result,function(checksheet,callback){
+					DB.getSyncDefctCount(checksheet.id,function(err,defectCount){
+						console.log("DB.getSyncDefctCount",defectCount);
+						if(defectCount == 0) {
+							checksheet.status = 1;
+							callback(null);
+						}else{
+							console.log("checksheet.defects.fetch start");
+							checksheet.defects.list(function(defects){
+							
+								async.each(defects,function(defect,callback){
+									console.log("defect success",defect.id);
+									DB.getSyncPhotoCount(defect.id,function(err,photoCount){
+										console.log("DB.getSyncPhotoCount",photoCount);
+										if(photoCount == 0) defect.status = 1;
+										callback(null);
+									});
+								},function(err){
+									callback(null);
+								});
+							});
+						}
+					});
+				},function(err){
+					persistence.flush(null,function() {
+						if(callback && typeof callback == 'function') 
+							callback(err);			 
+					});
+				});
+			});
+		};
 
 		this.runInBackGround = function(callback){
 			var self = this;

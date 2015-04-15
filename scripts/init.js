@@ -1,5 +1,5 @@
 
-var module = ons.bootstrap('Nova', ['onsen']);
+var module = ons.bootstrap('Nova', ['bootstrapLightbox']);
 var DB = new Nova.services.db();
 var dbSync = new Nova.services.db.DBSync(Nova.config);
 var photoSync = new Nova.services.PhotosSync(Nova.config);
@@ -103,10 +103,46 @@ module.controller('ChecksheetListController',['$scope','$http','$templateCache',
         }
 }]);
 
+module.config(function (LightboxProvider) {
+  // set a custom template
+  LightboxProvider.templateUrl = 'pages/lightbox-modal.html';
+});
+module.controller('LightboxController',function($scope,Lightbox){
+    $scope.openLightboxModal = function (images,index) {
+        Lightbox.openModal(images, index);
+    };
+    $scope.removePhoto = function(photo,comment){
+            console.log(arguments);
+            ons.notification.confirm({
+                message: 'Are you delete the photo?',
+                callback: function(answer) {
+                    // Do something here.
+
+                    if(answer == 1){
+                        $scope.$apply(function(){
+                            comment.images = $.grep(comment.images, function(item) {
+                                if(item != photo)
+                                    return true;
+                            }, false);
+                            console.log(comment.images);
+                            if(!$scope.isInsert){
+                                comment.images = $.grep(comment.images, function(item) {
+                                if(item.id != photo.id)
+                                    return true;
+                            }, false);
+                              persistence.remove(photo);  
+                              persistence.flush();
+                            } 
+                        })
+                    }
+                }
+            });
+
+        }
+});
 module.controller('EditChecksheetController',['$scope','$http','$templateCache','$rootScope',
     function($scope, $http, $templateCache,$rootScope) {
        // $('ons-scroller').height($(window).height() - 104);
-        
         $scope.townClicked =  function(){
             if(!$scope.isInsert) return;
             DB.getTowns(function(err,towns){
@@ -125,6 +161,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
             })
 
         };
+       
         $scope.siteClicked =  function(){
             if(!$scope.isInsert) return;
             //if(!fromMain) myNavigator.getCurrentPage().destroy();
@@ -389,33 +426,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
             }
            
         }
-        $scope.removePhoto = function(comment,photo){
-            ons.notification.confirm({
-                message: 'Are you delete the photo?',
-                callback: function(answer) {
-                    // Do something here.
 
-                    if(answer == 1){
-                        $scope.$apply(function(){
-                            comment.images = $.grep(comment.images, function(item) {
-                                if(item != photo)
-                                    return true;
-                            }, false);
-                            console.log(comment.images);
-                            if(!$scope.isInsert){
-                                comment.images = $.grep(comment.images, function(item) {
-                                if(item.id != photo.id)
-                                    return true;
-                            }, false);
-                              persistence.remove(photo);  
-                              persistence.flush();
-                            } 
-                        })
-                    }
-                }
-            });
-
-        }
         $scope.save = function(){
 
                 if(!$scope.model.sheet || $scope.model.sheet == ''){
