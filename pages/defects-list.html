@@ -13,9 +13,11 @@
             </ons-col>
             <ons-col  width="250px">
 
-                <ul class="photo-list" style="display: inline-block; margin: 0;padding: 0">
-                    <li ng-repeat="photo in comment.images" ng-click="removePhoto(comment,photo)">
-                        <img ng-src="{{photo.path}}" />
+                <ul ng-controller="LightboxController" class="photo-list" style="display: inline-block; margin: 0;padding: 0">
+                    <li ng-repeat="photo in comment.images" ng-show="photo.status==1 && photo.path">
+                        <a ng-click="openLightboxModal(comment.images,$index)" ng-dbl-click="removePhoto(comment,photo)">
+                            <img ng-src="{{photo.path}}" alt="" />
+                        </a>
                     </li>
                 </ul>
             </ons-col>
