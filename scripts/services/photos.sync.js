@@ -20,17 +20,11 @@ Nova.services.PhotosSync =  (function(){
 			this.db.getSyncPhotos(function(error,photos){
 
 				var win = function (r,callback) {
-
-				    console.log("Code = " + r.responseCode);
-				    console.log("Response = " + r.response);
-				    console.log("Sent = " + r.bytesSent);
 				    callback(null);
 				}
 
 				var fail = function (error,callback) {
-				    alert("An error has occurred: Code = " + error.code);
-				    console.log("upload error source " + error.source);
-				    console.log("upload error target " + error.target);
+				    console.log("An error has occurred: Code = " + error.code);
 				    callback(null);
 				}
 				
