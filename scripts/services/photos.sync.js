@@ -18,7 +18,9 @@ Nova.services.PhotosSync =  (function(){
 			console.log("start photo syncs.");
 			var self = obj ? obj : this;
 			this.db.getSyncPhotos(function(error,photos){
+
 				var win = function (r,callback) {
+
 				    console.log("Code = " + r.responseCode);
 				    console.log("Response = " + r.response);
 				    console.log("Sent = " + r.bytesSent);
@@ -33,23 +35,26 @@ Nova.services.PhotosSync =  (function(){
 				}
 				
 				async.each(photos,function(photo,callback){
-					console.log("each sync");
 					try{
 						var ft = new FileTransfer();
-						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-							fileSystem.root.getFile(path,null,
-							//read file success upload file
-							function(photoEntry){
-								console.log("photoEntry success:",photoEntry.fullPath);
-								ft.upload(photo.path, encodeURI(config.remoteAddress + "/uploads/save?photo="+photo.id), 
+						window.resolveLocalFileSystemURL(photo.path, function (photoEntry) {
+								
+								var url = encodeURI(config.remoteAddress + "/Uploads/Save/"+photo.id);
+								console.log("photoEntry success:",photoEntry.nativeURL,url);
+
+								var options = new FileUploadOptions();
+								options.fileKey = "file";
+								options.fileName = photoEntry.nativeURL.substr(photoEntry.nativeURL.lastIndexOf('/') + 1);
+								options.mimeType = "text/plain";
+
+
+								ft.upload(photo.path, url, 
 									function(r){ 
-										console.log("upload success:");
 										photo.status = 1;
-										 persistence.flush(function(){
+										persistence.flush(function(){
 										 	console.log("upload success:",photo.id);
-										 	callback(null);
+										 	win(r,callback);
 										 });
-										win(r,callback);
 									},
 									function(error){
 										console.log("upload fail:");
@@ -58,33 +63,49 @@ Nova.services.PhotosSync =  (function(){
 
 							// read file failed download file
 							},function(evt){
-								console.log("photoEntry fail:",evt);
-								var newPath  = cordova.file.dataDirectory +'/'+ defectPhoto.id+'.jpg' ;
-								fileTransfer.download(config.remoteAddress+photo.path,
-									newPath,
-									function(entry){
-										console.log("download success:"+entry.fullPath);
-										photo.path = entry.fullPath;
+								
+								var url = encodeURI(config.remoteAddress+"/Files/Photo/"+photo.id);
+								
+								window.requestFileSystem(LocalFileSystem.PERSISTENT, 1024*1024, function(fs) {
+		                            fs.root.getDirectory("files", {create:true}, function(dirEntry) {
+
+		                            	console.log("photoEntry fail:",evt,url);
+		                            	photo.path = dirEntry.nativeURL + '/' + persistence.createUUID()+'.jpg';
 										photo.status = 1;
-										 persistence.flush(function(){
-										 	console.log("download success:",entry.fullPath,photo.id);
-										 	callback(null);
-										 });
-									},
-									function(error){
-										console.log("download fail:");
-										fail(error,callback);
-									}, 
-									false,
-									{}
-								);
+										
+										ft.download(url,
+											photo.path,
+											function(entry){
+												console.log("download success:"+entry.nativeURL);
+												
+												 persistence.flush(function(){
+												 	console.log("download success:",entry.nativeURL,photo.id);
+												 	callback(null);
+												 });
+											},
+											function(error){
+												console.log("download fail:",photo);
+												fail(error,callback);
+											}, 
+											false,
+											{}
+										);
+		                                //fileEntry.moveTo(dirEntry, persistence.createUUID()+'.jpg', successCallback,errorCallback);
+		                            }, function(getDirectoryError){
+		                                 console.log("getDirectoryError",getDirectoryError);
+		                            });
+		                          
+		                        } , function(fsError){
+		                                 console.log("fsError",fsError);
+		                        });
+								
 							});
-						});
 				
 					}catch(e){
 						console.log("requestFileSystem err:",e);
 						callback(null);
 					}
+	
 				},function(error){
 					console.log("syncTimer: start",self);
 					self.syncTimer = setTimeout(function(){

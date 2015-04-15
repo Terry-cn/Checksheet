@@ -345,7 +345,7 @@ persistence.sync.postJSON = function(uri, data, callback,errorCallback) {
           persistence.sync.getJSON(uri + encodeUrlObj(args), function(result) {
               var allUpdates = [];
               cacheAndFindUpdates(session, Entity, result.updates, lastLocalSyncTime, lastServerPushTime, conflictCallback, function(updatesToPush) {
-                  persistence.sync.postJSON(uri, JSON.stringify(updatesToPush), function(pushData) {
+                  persistence.sync.postJSON(uri+"?t="+result.now, JSON.stringify(updatesToPush), function(pushData) {
                      if(pushData.now > 0){
                         session.flush(function() {
                           sync.localDate = getEpoch(new Date());
@@ -420,7 +420,7 @@ persistence.sync.postJSON = function(uri, data, callback,errorCallback) {
                       });
                   });
                 };
-                persistence.sync.postJSON(uri, JSON.stringify(updatesToPush), function(pushData) {
+                persistence.sync.postJSON(uri+"?t="+result.now, JSON.stringify(updatesToPush), function(pushData) {
                     if(pushData.now > 0){
                       session.flush(function() {
                         sync.localDate = getEpoch(new Date());

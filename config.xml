@@ -38,8 +38,6 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="orientation" value="landscape" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
-    <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
-    <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,root" />
 
     <gap:platform name="ios" />
     <gap:platform name="android" />
@@ -57,6 +55,7 @@
 <!--     <gap:plugin name="org.apache.cordova.camera" version="0.3.2" /> -->
     <gap:plugin name="org.apache.cordova.core.camera"/>
     <gap:plugin name="org.apache.cordova.file-transfer" version="0.4.6" />
+
     
     <icon src="icon.png" />
 
