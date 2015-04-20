@@ -131,11 +131,7 @@ module.controller('LightboxController',function($scope,Lightbox){
                             }
                         }
 
-                        if(lightbox.images.length==0){
-                            Lightbox.closeModal();
-                        }else{
-                            lightbox.prevImage();
-                        }
+                        Lightbox.closeModal();
                     }
                 }
             });
