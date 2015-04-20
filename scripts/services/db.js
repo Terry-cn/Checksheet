@@ -14,7 +14,10 @@ Nova.services.db =(function(){
 })();
 
 Nova.services.db.prototype.getTableLastUpdateTime = function(tableName,callback){
-	var mSync = sync.all().filter('tableName','=',tableName);
+	var mSync = sync.all()
+    .filter('tableName','=',tableName)
+    .and(new persistence.PropertyFilter('active', '=', 1));
+
 	mSync.one(null,function(result){
 		callback(false,result);
 	});
@@ -25,17 +28,30 @@ Nova.services.db.prototype.getSyncPhotos = function(callback){
     var photos = DefectPhotos.all()
     .prefetch('defects')
     .filter('status','=',0)
+    .and(new persistence.PropertyFilter('active', '=', 1))
     .limit(5);
     photos.list(null,function(result){
         console.log("get photos success:",result);
         callback(false,result);
     });
 };
-
+Nova.services.db.prototype.DeletePhoto = function(id,callback){
+    DefectPhotos.load(id,function(photo){
+        if(photo!=null){
+            photo.active = 0;
+            persistence.flush(function(){
+                callback(null);
+            })
+        }else{
+            callback(null);
+        }
+    });
+};
 Nova.services.db.prototype.getSyncChecksheets = function(callback){
 
     var checksheets = CheckSheets.all()
     .filter('status','=',0)
+    .and(new persistence.PropertyFilter('active', '=', 1))
     .limit(5);
     checksheets.list(null,function(result){
         callback(false,result);
@@ -46,6 +62,7 @@ Nova.services.db.prototype.getSyncDefctCount = function(checksheetId,callback){
 
     var defects = Defects.all()
     .filter('checksheet','=',checksheetId)
+    .and(new persistence.PropertyFilter('active', '=', 1))
     .and(new persistence.PropertyFilter('status', '=', 0));
     defects.count(null,function(num){
         callback(false,num);
@@ -56,6 +73,7 @@ Nova.services.db.prototype.getSyncPhotoCount = function(defectId,callback){
 
     var photos = DefectPhotos.all()
     .filter('defects','=',defectId)
+    .and(new persistence.PropertyFilter('active', '=', 1))
     .and(new persistence.PropertyFilter('status', '=', 0));
     photos.count(null,function(num){
         callback(false,num);
@@ -85,7 +103,7 @@ Nova.services.db.prototype.setTableLastUpdateTime = function(tx,tableName,lastUp
 };
 
 Nova.services.db.prototype.getTowns = function(callback){
-	var dbTown = Towns.all().order('name',true);
+	var dbTown = Towns.all().order('name',true).filter('active', '=', 1);
     dbTown.list(null,function(results){
         var townsName = [];
         var towns = [];
@@ -99,7 +117,10 @@ Nova.services.db.prototype.getTowns = function(callback){
 	})
 };
 Nova.services.db.prototype.getSites = function(town,callback){
-    var dbSite = Sites.all().filter('town','=',town).order('name',true);
+    var dbSite = Sites.all()
+    .filter('town','=',town)
+    .and(new persistence.PropertyFilter('active', '=', 1))
+    .order('name',true);
     dbSite.list(null,function(results){
         console.log(results,'site',town);
         var sitesName = [];
@@ -114,7 +135,10 @@ Nova.services.db.prototype.getSites = function(town,callback){
     });
 };
 Nova.services.db.prototype.getAddress = function(site,callback){
-    var dbLocation = Locations.all().filter('site','=',site).order('address',true);
+    var dbLocation = Locations.all()
+    .filter('site','=',site)
+    .and(new persistence.PropertyFilter('active', '=', 1))
+    .order('address',true);
     dbLocation.list(null,function(results){
         var locationName = [];
         var locations = [];
@@ -129,6 +153,7 @@ Nova.services.db.prototype.getAddress = function(site,callback){
 };
 Nova.services.db.prototype.getAsset = function(locationId,callback){
     var assets = Assets.all().filter('location','=',locationId)
+        .and(new persistence.PropertyFilter('active', '=', 1))
         .order('assetName',true);
     assets.list(null,function(results){
         var arrAssets = [];
@@ -139,6 +164,7 @@ Nova.services.db.prototype.getAsset = function(locationId,callback){
     })
 };
 Nova.services.db.prototype.saveCheckSheetResult = function(tx,assetchecksheet,results,callback){
+    debugger;
     var newid = persistence.createUUID();
     var params = [];
     var columns = [];
@@ -158,6 +184,10 @@ Nova.services.db.prototype.saveCheckSheetResult = function(tx,assetchecksheet,re
     columns.push("assetchecksheet");
     params.push("?");
     values.push(assetchecksheet.id);
+
+    columns.push("active");
+    params.push("?");
+    values.push(1);
 
     columns.push("id");
     params.push("?");
@@ -194,7 +224,9 @@ Nova.services.db.prototype.getCheckSheetResult =function(assetchecksheet,id,call
     })
 }
 Nova.services.db.prototype.getAssetSheets = function(assetId,callback){
-    var sheets = AssetCheckSheets.all().filter('asset','=',assetId)
+    var sheets = AssetCheckSheets.all()
+        .filter('asset','=',assetId)
+        .and(new persistence.PropertyFilter('active', '=', 1))
         .order('title',true);
     sheets.list(null,function(results){
         var arrSheets = [];
@@ -207,6 +239,7 @@ Nova.services.db.prototype.getAssetSheets = function(assetId,callback){
 
 Nova.services.db.prototype.getSheetItems = function(asset_check_sheets_id,callback){
     var items = AssetCheckSheetItems.all().filter('assetchecksheet','=',asset_check_sheets_id)
+        .and(new persistence.PropertyFilter('active', '=', 1))
         .order('id',true);
     items.list(null,function(results){
         callback(false,results);
@@ -215,6 +248,7 @@ Nova.services.db.prototype.getSheetItems = function(asset_check_sheets_id,callba
 
 Nova.services.db.prototype.getCheckSheets = function(callback){
     var items = CheckSheets.all()
+        .filter('active', '=', 1)
         .prefetch("assetchecksheet")
         .order('id',true);
     items.list(null,function(results){

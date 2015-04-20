@@ -21,7 +21,8 @@ var AssetCheckSheets = persistence.define('assetchecksheets', {
     active:"INT"
 });
 var AssetCheckSheetItems = persistence.define('assetchecksheetitems', {
-    question: "TEXT"
+    question: "TEXT",
+    active:"INT"
 });
 // var ItemsResults = persistence.define('itemresults', {
 //   	created: "DATE",
@@ -31,24 +32,29 @@ var AssetCheckSheetItems = persistence.define('assetchecksheetitems', {
 // });
 var Defects = persistence.define('defects', {
     comment:"TEXT",
-    status:"INT"
+    status:"INT",
+    active:"INT"
 });
 var DefectPhotos = persistence.define('defectphotos', {
     path:"TEXT",
-    status:"INT"
+    status:"INT",
+    active:"INT"
 });
 
 var Locations = persistence.define('locations', {
     location_no:"TEXT",
     address:"TEXT",
-    description:"TEXT"
+    description:"TEXT",
+    active:"INT"
 });
 
 var Towns  = persistence.define('twons', {
-    name:"TEXT"
+    name:"TEXT",
+    active:"INT"
 });
 var Sites  = persistence.define('sites', {
-    name:"TEXT"
+    name:"TEXT",
+    active:"INT"
 });
 var Assets = persistence.define('assets', {
     assetNo:"TEXT",
