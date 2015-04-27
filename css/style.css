@@ -276,3 +276,5 @@ ul.photo-list li>img{
 .content-tabs .list--inset{
 	margin: auto 0;
 }
+
+.list .row{ margin-left: 0;margin-right: 0;}

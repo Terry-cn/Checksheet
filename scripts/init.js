@@ -109,36 +109,37 @@ module.config(function (LightboxProvider) {
 });
 module.controller('LightboxController',function($scope,Lightbox){
     $scope.openLightboxModal = function (images,index) {
-        Lightbox.openModal(images, index);
-    };
-    $scope.removePhoto = function(photo,comment){
-            console.log(arguments);
+        Lightbox.removePhoto = function(){
+            var lightbox = this;
+            console.log(this);
             ons.notification.confirm({
                 message: 'Are you delete the photo?',
                 callback: function(answer) {
                     // Do something here.
 
                     if(answer == 1){
-                        $scope.$apply(function(){
-                            comment.images = $.grep(comment.images, function(item) {
-                                if(item != photo)
-                                    return true;
-                            }, false);
-                            console.log(comment.images);
-                            if(!$scope.isInsert){
-                                comment.images = $.grep(comment.images, function(item) {
-                                if(item.id != photo.id)
-                                    return true;
-                            }, false);
-                              persistence.remove(photo);  
-                              persistence.flush();
-                            } 
-                        })
+
+                        for(var i=0;i<lightbox.images.length;i++){
+                            if(lightbox.image == lightbox.images[i]){
+                                if(lightbox.image.id.length == 32){
+                                    DB.DeletePhoto(lightbox.image.id,function(err){
+                                       
+                                    });
+                                }
+                                lightbox.images.splice(i,1);
+                                console.log(i,lightbox.images);
+                            }
+                        }
+
+                        Lightbox.closeModal();
                     }
                 }
             });
 
         }
+        Lightbox.openModal(images, index);
+    };
+
 });
 module.controller('EditChecksheetController',['$scope','$http','$templateCache','$rootScope',
     function($scope, $http, $templateCache,$rootScope) {
@@ -265,17 +266,24 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                 myNavigator.popPage();
                 $scope.model.defects=[];
             }else{
+
                 dbModel.defects.list(function(items){
                     $scope.model.defects = items;
                     items.forEach(function(defect){
                         defect.photos.list(function(results){
-                            defect.images = results;
+                            defect.images = [];
+                            results.forEach(function(image){
+                                defect.images.push({
+                                    id:image.id,
+                                    path:image.path,
+                                    active:image.active
+                                });
+                            });
                         })
                     })
                 });
             }
 
-            
             DB.getSheetItems($scope.model.sheet.id,function(err,items){
                 $scope.$apply(function(){
                     items.forEach(function(item){
@@ -288,7 +296,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                             });
 
                         }
-                    })
+                    });
                     $scope.model.results = items;
                     $scope.comments = function(sheet,index){
                         var $this = $('#check-row-'+sheet.server_id);
@@ -322,7 +330,8 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
             var lastComment = $scope.model.defects[$scope.model.defects.length - 1];
             if(!lastComment || lastComment.comment != '') {
                 $scope.model.defects.push({
-                    comment: ''
+                    comment: '',
+                    active:1
                 });
             }
         };
@@ -347,20 +356,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                             });
                         
                      });
-                    //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-                        // path = path.substring(7);
-                        // console.log("requestFileSystem加载完毕",fileSystem);
-                        // console.log(fileSystem.root.name,path);  
-
-                        // fileSystem.root.getFile(path,null,function(photoEntry){
-                        //     console.log(photoEntry.fullPath);
-                        //     photoEntry.copyTo(cordova.file.dataDirectory,defectPhoto.id+'.jpg',
-                        //         successCallback, 
-                        //         errorCallback);
-                             
-                        // },function(evt){
-                        //     console.log("读取文件失败",evt.target.error.code);
-                        // });
+                    
                         
                         function successCallback(entry){
                             //nativeURL: "file:///var/mobile/Applications/8AB3CE37-2461-48D5-A968-3C471C7D58D1/Documents/files/cdv_photo_001.j…"
@@ -372,22 +368,32 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                 var defectPhoto = new DefectPhotos({
                                     created: new Date(),
                                     path:entry.nativeURL,
+                                    active:1,
                                     status:0
                                 });
-                                comment.photos.add(defectPhoto);
-                                console.log("add defectPhoto!");
-                                persistence.flush(function(){
-                                    console.log("add defectPhoto success!");
-                                     //remove to cordova.file.dataDirectory
-                                    
+                                
+                                if(!comment.images) comment.images = [];
+                                comment.images.push({
+                                    id:defectPhoto.id,
+                                    path:defectPhoto.path,
+                                    active:defectPhoto.active
                                 });
+                                if(comment.photos){
+                                    comment.photos.add(defectPhoto);
+                                    console.log(defectPhoto);
+                                    console.log("add defectPhoto!");
+                                    persistence.flush(function(){
+                                        console.log("add defectPhoto success!");
+                                         //remove to cordova.file.dataDirectory
+                                    });
+                                }
                            }
                             console.log(entry);
                         };
                         function errorCallback(fileError){
                             console.log("copy photo error",fileError);
                         };
-                    //});
+                    
                    
                     
             }
@@ -411,18 +417,25 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                 });
             }catch(exp){
                 console.log(exp,comment);
-                if (typeof comment.images == 'undefined') 
-                    comment.images = [];
-                comment.images.push({'path':'images/log.png'});
 
                 var defectPhoto = new DefectPhotos({
                     created: new Date(),
                     path:'images/log.png',
-                    status:0
+                    active:1,
+                    status:1
                 });
-                comment.photos.add(defectPhoto);
-                console.log("add defectPhoto!");
-                persistence.flush();
+                if(!comment.images) comment.images = [];
+                comment.images.push({
+                    id:defectPhoto.id,
+                    path:defectPhoto.path,
+                    active:defectPhoto.active
+                });
+                if(comment.photos){
+                    comment.photos.add(defectPhoto);
+                    console.log("add defectPhoto!");
+                    persistence.flush(function(){
+                    });
+                }
             }
            
         }
@@ -442,14 +455,15 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                     message:'Ready save check sheet result?.',
                     callback:function(result){
 
-                        persistence.transaction(function(tx) {
+                        //persistence.transaction(function(tx) {
                         if(result == 1){
                             if($scope.isInsert){
                                 dbModel = new CheckSheets({
                                     employee: $scope.model.employee,
                                     add_date:$scope.model.add_date,
                                     created: new Date(),
-                                    status:0
+                                    status:0,
+                                    active:1
                                 });
                                 console.log($scope.model.sheet.entity);
                                 dbModel.assetchecksheet = $scope.model.sheet.entity;
@@ -463,12 +477,12 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                 //     });
                                 //     dbModel.results.add(checkedItem);
                                 // }
-                                
                                 for(var i=0;$scope.model.defects && i<$scope.model.defects.length;i++){
                                     var comment = $scope.model.defects[i];
                                     if(comment.comment || (comment.images && comment.images.length > 0)){
                                         var def = new Defects({
                                             created:new Date(),
+                                            active:1,
                                             comment:comment.comment,
                                             status:1
                                         });
@@ -476,16 +490,18 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                             var photo = new DefectPhotos({
                                                 created: new Date(),
                                                 path:comment.images[j].path,
-                                                status:0
+                                                status:0,
+                                                active:1
                                             });
                                             def.photos.add(photo);
                                         }
                                         dbModel.defects.add(def);
                                     }
                                 }
-                                DB.saveCheckSheetResult(tx,dbModel.assetchecksheet,$scope.model.results,function(resultId){
+                                debugger;
+                                DB.saveCheckSheetResult(null,dbModel.assetchecksheet,$scope.model.results,function(resultId){
                                        dbModel.resultId = resultId;   
-                                       persistence.flush(tx, function() {
+                                       persistence.flush(null, function() {
                                        $rootScope.$broadcast('refreshCheckList');
                                        console.log('add flush time:',new Date());
                                         myNavigator.popPage();
@@ -519,7 +535,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                                     itemResults["criteria_"+i] = item.result;
                                                     itemResults["criteria_"+i+"_comment"] = item.comment;
                                                 }
-                                                persistence.flush(tx, function() {
+                                                persistence.flush(null, function() {
                                                     callback(null);
                                                 });
                                             });
@@ -559,7 +575,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                         }
                                     ],function(err){
                                         setTimeout(function(){
-                                            persistence.flush(tx, function() {
+                                            persistence.flush(null, function() {
                                                 $rootScope.$broadcast('refreshCheckList');
                                                 console.log('update flush time:',new Date());
                                                 myNavigator.popPage();
@@ -570,7 +586,8 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                 
                             }
                             
-                        }});
+                        };
+                        //});
                     }
                 });
         }
@@ -634,7 +651,6 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
             };
             
             dbModel.assetchecksheet.items.list(function(items){
-                console.log('oooooooooo',items);
                 DB.getCheckSheetResult(assetchecksheet,dbModel.resultId,function(result){
                     if(result){
                         for(var i=0;i<items.length;i++){

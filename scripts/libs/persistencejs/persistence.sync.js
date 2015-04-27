@@ -369,7 +369,8 @@ persistence.sync.postJSON = function(uri, data, callback,errorCallback) {
 
       if(window.CheckSheetResults[modelName]) return;
       var columns = {
-          created:"DATE"
+          created:"DATE",
+          active:"INT"
       };
       for(var i=0;i<assetchecksheet.columnNum;i++){
         var index = i+1;

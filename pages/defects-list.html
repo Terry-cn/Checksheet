@@ -5,7 +5,7 @@
             <ons-col width="220px">Photos</ons-col>
         </ons-row>
     </ons-list-header>
-    <ons-list-item ng-repeat="comment in model.defects">
+    <ons-list-item ng-repeat="comment in model.defects" ng-show="comment.active==1">
         <ons-row>
             <ons-col>
                 <input type="text" style="width: 90%"  ng-model="comment.comment" class="text-input--underbar" placeholder="Comments" />
@@ -14,9 +14,9 @@
             <ons-col  width="250px">
 
                 <ul ng-controller="LightboxController" class="photo-list" style="display: inline-block; margin: 0;padding: 0">
-                    <li ng-repeat="photo in comment.images">
-                        <a ng-click="openLightboxModal(comment.images,$index)" ng-dbl-click="removePhoto(comment,photo)">
-                            <img ng-src="{{photo.path}}" alt="" />
+                    <li ng-repeat="photo in comment.images" ng-show="photo.active==1">
+                        <a ng-click="openLightboxModal(comment.images,$index)">
+                            <img ng-src="{{photo.path}}?{{photo.active}}" alt="" />
                         </a>
                     </li>
                 </ul>
