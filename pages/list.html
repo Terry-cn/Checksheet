@@ -5,7 +5,7 @@
                 <div class="left"><ons-back-button ng-click="syncOff()">Back</ons-back-button></div>
             </div>
             <div class="center">Checksheets</div>
-            <div class="right toolbar-button">
+            <div class="right toolbar-button" ng-show="canEdit">
                 <i class="fa fa-plus-square-o Editeve " ng-click="addChecksheet()"></i>
             </div>
         </ons-toolbar>

@@ -4,17 +4,18 @@
     <ons-list-item ng-repeat="checkeet in model.results">
         <ons-row id="check-row-{{checkeet.id}}">
             <ons-col><p>{{checkeet.question}}</p></ons-col>
-            <ons-col width="120px" class="checksheet-buttons">
-                <input type="radio" ng-model="checkeet.result"  id="check-result-{{checkeet.id}}-1" name="check-result-{{checkeet.id}}" ng-value="1" ng-checked="checkeet.result == 1">
+            <ons-col width="120px" class="checksheet-buttons" >
+                <input type="radio" ng-model="checkeet.result"  id="check-result-{{checkeet.id}}-1" name="check-result-{{checkeet.id}}" ng-value="1" ng-checked="checkeet.result == 1" ng-disabled="!canEdit">
                 <label class="radio-button check-yes"  for="check-result-{{checkeet.id}}-1"></label>
-                <input type="radio"  ng-model="checkeet.result" id="check-result-{{checkeet.id}}-2" name="check-result-{{checkeet.id}}" ng-value="0" ng-checked="checkeet.result == 0">
+                <input type="radio"  ng-model="checkeet.result" id="check-result-{{checkeet.id}}-2" name="check-result-{{checkeet.id}}" ng-value="0" ng-checked="checkeet.result == 0" ng-disabled="!canEdit">
                 <label class="radio-button check-no"  for="check-result-{{checkeet.id}}-2"></label>
-                <input type="radio" ng-model="checkeet.result"  id="check-result-{{checkeet.id}}-3" name="check-result-{{checkeet.id}}" ng-value="2" ng-checked="checkeet.result == 2" ng-checked="true">
+                <input type="radio" ng-model="checkeet.result"  id="check-result-{{checkeet.id}}-3" name="check-result-{{checkeet.id}}" ng-value="2" ng-checked="checkeet.result == 2" ng-checked="true" ng-disabled="!canEdit">
                 <label class="radio-button check-nan"  for="check-result-{{checkeet.id}}-3"></label>
             </ons-col>
+
         </ons-row>
         <ons-row class="comments" ng-hide="checkeet.result != 0">
-            <ons-col><input type="text"  ng-model="checkeet.comment" class="text-input--underbar" style="width:100%" placeholder="Comments" /></ons-col>
+            <ons-col><input type="text"  ng-model="checkeet.comment" class="text-input--underbar" style="width:100%" placeholder="Comments" ng-readonly="!canEdit" /></ons-col>
         </ons-row>
     </ons-list-item>
     

@@ -164,7 +164,6 @@ Nova.services.db.prototype.getAsset = function(locationId,callback){
     })
 };
 Nova.services.db.prototype.saveCheckSheetResult = function(tx,assetchecksheet,results,callback){
-    debugger;
     var newid = persistence.createUUID();
     var params = [];
     var columns = [];
@@ -205,12 +204,16 @@ Nova.services.db.prototype.saveCheckSheetResult = function(tx,assetchecksheet,re
     ( "+columns.join(",")+" ) \
     VALUES \
     ( "+params.join(",")+"  )";
-    tx.executeSql(sql,values,function(result){
-        callback(newid);
-        console.log("success:",arguments);
-    },function(){
-        callback(newid);
-        console.log("err:",arguments);
+    persistence.transaction(function(tx) {
+        tx.executeSql(sql,values,function(result){
+            persistence.flush(tx, function() {
+                callback(newid);
+            });
+            console.log("success:",arguments);
+        },function(){
+            callback(newid);
+            console.log("err:",arguments);
+        });
     });
 };
 Nova.services.db.prototype.getResultsTableName = function(assetchecksheet){
