@@ -1,7 +1,7 @@
 <div class=modal-body ng-swipe-left=Lightbox.nextImage() ng-swipe-right=Lightbox.prevImage()>
 	<div class=lightbox-nav>
 		<button class=close aria-hidden=true ng-click=$dismiss()>×</button>
-		<div class=btn-group>
+		<div class=btn-group ng-if="canEdit">
 			<!-- <a class="btn btn-xs btn-default" ng-click=Lightbox.prevImage()>‹ Previous</a>  -->
 			<a ng-click=Lightbox.removePhoto() target=_blank class="btn btn-xs btn-default" title="Open in new tab">Delete this Photo</a> 
 			<!-- <a class="btn btn-xs btn-default" ng-click=Lightbox.nextImage()>Next ›</a> -->

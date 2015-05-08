@@ -47,22 +47,55 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
                 return false;
             }
             $rootScope.$emit('BUSY');
+
             $http.post(getServerURL('token'),$.param({
                // withCredentials: true,
                 username:scope.email,
                 password:scope.password,
                 grant_type:'password'
             }),ajaxOption).success(function(data){
-                ajaxOption.headers.Authorization = data.token_type + ' '+data.access_token;
-                localStorage.setItem('Authorization',ajaxOption.headers.Authorization);
-                dbSync.startSync($http,ajaxOption,$rootScope);
-                photoSync.startSync();
-                // ons.notification.alert({
-                //     message:data.access_token
-                // });
-                //console.log(data,data.access_token);
-                $rootScope.$emit('NOTBUSY');
-                myNavigator.pushPage("pages/list.html");
+
+                var lastLoginEmail = localStorage.getItem('Email');
+                var currentEmail  = $.trim(scope.email.toLowerCase());
+                if(lastLoginEmail != currentEmail){
+                    DB.clear(function(){
+                        loginSuccessed();
+                    });
+                }else{
+                    loginSuccessed();
+                }
+                function loginSuccessed(){
+                    ajaxOption.headers.Authorization = data.token_type + ' '+data.access_token;
+                    localStorage.setItem('Authorization',ajaxOption.headers.Authorization);
+                    localStorage.setItem('Email',currentEmail);
+                    //get user roles name
+                    $http.get(getServerURL('api/Account/Roles'),ajaxOption).success(function(roles){
+                        try{
+                            dbSync.startSync($http,ajaxOption,$rootScope);
+                        }catch(e){
+                            setTimeout(function(){
+                                dbSync.startSync($http,ajaxOption,$rootScope);
+                            },60000);
+                        }
+
+                        console.log("get roles success",roles);
+                        localStorage.setItem('Roles',JSON.stringify(roles));
+                        //register Role function
+                        window.isInRole = function(role){
+                            var roles = JSON.parse(localStorage.getItem('Roles'));
+                            return roles.indexOf(role) > -1;
+                        };
+                        //console.log(window.isInRole("Checksheet Admin"));
+                        photoSync.startSync();
+                        // ons.notification.alert({
+                        //     message:data.access_token
+                        // });
+                        //console.log(data,data.access_token);
+                        $rootScope.$emit('NOTBUSY');
+                        myNavigator.pushPage("pages/list.html");
+                    })
+                }
+              
             }).error(function(err){
                 //console.log(err);
                 if(err && err.error_description){
@@ -101,6 +134,8 @@ module.controller('ChecksheetListController',['$scope','$http','$templateCache',
             dbSync.stopSync();
             photoSync.stopSync();
         }
+
+        $scope.canEdit = window.isInRole("Checksheet Admin") || window.isInRole("Checksheet Resource");
 }]);
 
 module.config(function (LightboxProvider) {
@@ -109,6 +144,9 @@ module.config(function (LightboxProvider) {
 });
 module.controller('LightboxController',function($scope,Lightbox){
     $scope.openLightboxModal = function (images,index) {
+        if( !window.isInRole("Checksheet Admin") && !window.isInRole("Checksheet Resource"))
+            return;
+        Lightbox.canEdit = true;
         Lightbox.removePhoto = function(){
             var lightbox = this;
             console.log(this);
@@ -144,6 +182,12 @@ module.controller('LightboxController',function($scope,Lightbox){
 module.controller('EditChecksheetController',['$scope','$http','$templateCache','$rootScope',
     function($scope, $http, $templateCache,$rootScope) {
        // $('ons-scroller').height($(window).height() - 104);
+        $scope.canEdit = window.isInRole("Checksheet Admin") || window.isInRole("Checksheet Resource");
+        //if no edit permission return
+        if(!$scope.canEdit){
+
+        };
+
         $scope.townClicked =  function(){
             if(!$scope.isInsert) return;
             DB.getTowns(function(err,towns){
@@ -162,7 +206,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
             })
 
         };
-       
+        
         $scope.siteClicked =  function(){
             if(!$scope.isInsert) return;
             //if(!fromMain) myNavigator.getCurrentPage().destroy();
@@ -498,7 +542,6 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                         dbModel.defects.add(def);
                                     }
                                 }
-                                debugger;
                                 DB.saveCheckSheetResult(null,dbModel.assetchecksheet,$scope.model.results,function(resultId){
                                        dbModel.resultId = resultId;   
                                        persistence.flush(null, function() {
@@ -685,14 +728,16 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
 module.controller('ItemsChooseController',['$scope','$http','$templateCache','$rootScope',
     function($scope, $http, $templateCache,$rootScope) {
         var scope = $scope;
+        scope.canEdit = window.isInRole("Checksheet Admin") || window.isInRole("Checksheet Resource");
         scope.title = $templateCache.get('title');
         scope.items = $templateCache.get('items');
         scope.command = $templateCache.get('command');
+        if(scope.canEdit){
         scope.itemChecked = function(item){
-            $rootScope.selectedItem = item;
-            $rootScope.$broadcast(scope.command);
-            //myNavigator.popPage();
-
+                $rootScope.selectedItem = item;
+                $rootScope.$broadcast(scope.command);
+                //myNavigator.popPage();
+            }
         }
     }]);
 
