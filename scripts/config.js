@@ -7,6 +7,6 @@ window.Nova ={
 		debug:true,
 		version:null,
 		timeout:20000,
-		syncTime:10000
+		syncTime:30000
 	}
 };

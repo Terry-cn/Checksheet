@@ -33,7 +33,7 @@ Nova.services.PhotosSync =  (function(){
 						var ft = new FileTransfer();
 						window.resolveLocalFileSystemURL(photo.path, function (photoEntry) {
 								
-								var url = encodeURI(config.remoteAddress + "/Uploads/Save/"+photo.id);
+								var url = encodeURI(config.remoteAddress + "/Uploads/SaveFromMobile/"+photo.id);
 								console.log("photoEntry success:",photoEntry.nativeURL,url);
 
 								var options = new FileUploadOptions();

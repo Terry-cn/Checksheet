@@ -69,7 +69,7 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
                     localStorage.setItem('Authorization',ajaxOption.headers.Authorization);
                     localStorage.setItem('Email',currentEmail);
                     //get user roles name
-                    $http.get(getServerURL('api/Account/Roles'),ajaxOption).success(function(roles){
+                    $http.get(getServerURL('api/Account/Roles'),ajaxOption).success(function(roleData){
                         try{
                             dbSync.startSync($http,ajaxOption,$rootScope);
                         }catch(e){
@@ -78,8 +78,8 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
                             },60000);
                         }
 
-                        console.log("get roles success",roles);
-                        localStorage.setItem('Roles',JSON.stringify(roles));
+                        localStorage.setItem('Roles',JSON.stringify(roleData.Roles));
+                        localStorage.setItem('Name',roleData.Name);
                         //register Role function
                         window.isInRole = function(role){
                             var roles = JSON.parse(localStorage.getItem('Roles'));
@@ -648,7 +648,7 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
         if(!dbModel){
             $scope.isInsert = true;
             $scope.model = {
-                employee : "David Jones",
+                employee : localStorage.getItem('Name'),
                 add_date : new Date(),
                 defects : [],
                 results :[],

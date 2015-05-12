@@ -243,8 +243,10 @@ persistence.sync.postJSON = function(uri, data, callback,errorCallback) {
                   session.add(localItem);
                 }
               }
+              console.log("find post data",Entity.meta,lastLocalSyncTime);
               // Step 4: Find local new/updated/removed items (not part of the remote change set)
               Entity.all(session).filter("_lastChange", ">", lastLocalSyncTime).list(function(allNewItems) {
+                console.log("find post data success",Entity.meta,lastLocalSyncTime,allNewItems);
                   var newItems = [];
                   for (var i=0,l=allNewItems.length;i<l;i++) {
                     if (ids.indexOf(allNewItems[i].id)===-1) {
