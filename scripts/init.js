@@ -406,29 +406,30 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                             $scope.$apply(function(){
                                 if (typeof comment.images == 'undefined') comment.images = [];
                                 comment.images.push({'path':entry.nativeURL});
-                            });
-                            if(!$scope.isInsert && typeof comment.id != 'undefined'){
-                                var defectPhoto = new DefectPhotos({
-                                    created: new Date(),
-                                    path:entry.nativeURL,
-                                    active:1,
-                                    status:0
-                                });
-                                
-                                if(!comment.images) comment.images = [];
-                                comment.images.push({
-                                    id:defectPhoto.id,
-                                    path:defectPhoto.path,
-                                    active:defectPhoto.active
-                                });
-                                if(comment.photos){
-                                    comment.photos.add(defectPhoto);
-                                    persistence.flush(function(){
-                                        console.log("add defectPhoto success!");
-                                         //remove to cordova.file.dataDirectory
+                           
+                                if(!$scope.isInsert && typeof comment.id != 'undefined'){
+                                    var defectPhoto = new DefectPhotos({
+                                        created: new Date(),
+                                        path:entry.nativeURL,
+                                        active:1,
+                                        status:0
                                     });
-                                }
-                           }
+                                    
+                                    if(!comment.images) comment.images = [];
+                                    comment.images.push({
+                                        id:defectPhoto.id,
+                                        path:defectPhoto.path,
+                                        active:defectPhoto.active
+                                    });
+                                    if(comment.photos){
+                                        comment.photos.add(defectPhoto);
+                                        persistence.flush(function(){
+                                            console.log("add defectPhoto success!");
+                                             //remove to cordova.file.dataDirectory
+                                        });
+                                    }
+                               }
+                            });     
                         };
                         function errorCallback(fileError){
                             console.log("copy photo error",fileError);
