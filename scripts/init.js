@@ -383,7 +383,6 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
 
              var TakePhotoCompleted = function(path) {
                     
-                    console.log("takePhotos ",path,device.platform,cordova.file);
                     window.resolveLocalFileSystemURL(path, function (fileEntry) {
                         //var dataDirectory = (device.platform =="iOS") ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
                         // parentEntry = new DirectoryEntry({fullPath: dataDirectory});
@@ -424,15 +423,12 @@ module.controller('EditChecksheetController',['$scope','$http','$templateCache',
                                 });
                                 if(comment.photos){
                                     comment.photos.add(defectPhoto);
-                                    console.log(defectPhoto);
-                                    console.log("add defectPhoto!");
                                     persistence.flush(function(){
                                         console.log("add defectPhoto success!");
                                          //remove to cordova.file.dataDirectory
                                     });
                                 }
                            }
-                            console.log(entry);
                         };
                         function errorCallback(fileError){
                             console.log("copy photo error",fileError);
