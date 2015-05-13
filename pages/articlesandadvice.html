@@ -1,0 +1,111 @@
+﻿ <ons-page>
+<ons-toolbar>
+    <div class="left" id="articlesAndAd_bars">
+        <ons-toolbar-button ng-click="app.slidingMenu.toggleMenu()"><ons-icon icon="bars"></ons-icon></ons-toolbar-button>
+    </div>
+    <div class="center" id="articlesAndAd_title">The Aga Khan Health Board for the UK</div>
+    <div class="right" id="articlesAndAd_right">
+        <img src="images/logo.png" class="articlesAndAd_Logo">
+    </div>
+</ons-toolbar>
+<div id="articlesAndAd_Container">
+    <div class="briefContent">
+        Far far away, behind the word mountains, far from the
+        countries Vokalia and Consonantia, there live the blind
+        texts. Separated they live in Bookmarksgrove right at the
+        coast of the Semantics, a large language ocean.
+    </div>
+    <div class="articlesAndAd_mainCon">
+        <div class="articlesAndAd_lrContainer">
+            <div class="articlesAndAd_briefC">
+                What is your name?
+            </div>
+            <div>
+                <input type="text" class="text-input" placeholder="Name" value="">
+            </div>
+        </div>
+    
+        <div class="articlesAndAd_lrContainer">
+            Do you have any of
+            these conditions,
+            tick all that apply:
+            <div  id="checkBoxdiv">
+                <!--<label class="checkbox--noborder" >
+                    <input type="checkbox" id="check1">
+                        <div class="checkbox__checkmark" id="borderSet"> </div>
+                        Diabetes
+                </label>
+
+                <label class="checkbox--noborder">
+                    <input type="checkbox" checked="checked">
+                    <div class="checkbox__checkmark" id="borderSet"></div>
+                    Cancer
+                </label>
+                
+                <label class="checkbox--noborder">
+                    <input type="checkbox" checked="checked">
+                    <div class="checkbox__checkmark" id="borderSet"></div>
+                    Heart Disease
+                </label>-->
+                <label class="checkbox">
+                    <input type="checkbox">
+                    <div class="checkbox__checkmark"></div>
+                    Diabetes
+                </label>
+                 &nbsp;&nbsp;
+                <label class="checkbox">
+                    <input type="checkbox" checked="checked">
+                    <div class="checkbox__checkmark"></div>
+                    Cancer
+                </label>
+                <br />
+                <label class="checkbox">
+                    <input type="checkbox" >
+                    <div class="checkbox__checkmark"></div>
+                    Heart Disease
+                </label>
+                <!--<label class="checkbox--noborder">
+                    <input type="checkbox" disabled checked="checked">
+                    <div class="checkbox__checkmark"></div>
+                    Disabled
+                </label>-->
+
+            </div>
+        </div>
+        <div class="articlesAndAd_lrContainer">
+            <div class="articlesAndAd_briefC">
+                Do you have any
+                other health
+                problems, please
+                describe:
+            </div>
+                <!--<textarea rows="3" cols="30" style="border:1px solid #9d9ba3">....</textarea>-->
+                <div class="inputMessageArea">
+                    <textarea class="textarea" rows="3" id="areaChangeCols" placeholder="....."></textarea>
+                </div>
+        </div>
+       
+        <div class="articlesAndAd_lrContainer">
+            <div class="articlesAndAd_briefC">
+                How often do you
+                exercise:
+            </div>
+            <div >
+                <select class="articlesAndAd_selecteL">
+                    <option selected="selected">Daily</option>
+                    <option>year</option>
+                    <option>week</option>
+                    <option>month</option>
+                </select>
+            </div>
+        </div>
+      
+      <div class="articlesAndAd_save">
+    
+        <ons-button class="articlesAndAd_btnSave">Save</ons-button>
+
+      </div>
+       
+    </div>
+</div>
+</ons-page>

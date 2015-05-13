@@ -1,0 +1,89 @@
+﻿        <ons-page  ng-controller="MessageListController">
+            <ons-toolbar id="BarborderBottom">
+                <div class="left" id="articlesAndAd_bars">
+                    <ons-toolbar-button ng-click="app.slidingMenu.toggleMenu()"><ons-icon icon="bars"></ons-icon></ons-toolbar-button>
+                </div>
+                <div class="center" id="articlesAndAd_title">The Aga Khan Health Board for the UK</div>
+                <div class="right" id="articlesAndAd_right">
+                    <img src="images/logo-white.png" class="articlesAndAd_Logo">
+                </div>
+            </ons-toolbar>
+            <ons-list class="plan-list">
+                <ons-list-item  class="plan" ng-repeat="msg in messages" ng-click="openMessageDetail(msg)">
+                    <ons-row class="borderSet">
+                        <ons-col width="80px" class="plan-left">
+                            <div class="plan-date" id="plan-date1" ng-bind-html="msg.last_modified | formatTime">
+                                
+                            </div>
+                        </ons-col>
+                        <ons-col width="6px" class="plan-center" ng-style="{ backgroundColor:msg.read==0 ? '#3399ff' : '#ccc'}">
+                        </ons-col>
+
+                        <ons-col class="plan-right list-message" >
+                        <strong>{{msg.title}}</strong>
+                        <p ng-bind-html="msg.content | trustHtml"></p>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+
+<!-- 
+                <ons-list-item modifier="chevron" class="plan" ng-repeat=" a in [2,3]">
+                      //该属性表示重复该条信息10次 ,2,3,4,5,6,7,8,9,10-
+                    <ons-row class="borderSet">
+                        <ons-col width="80px" class="plan-left">
+                            <div class="plan-date" id="plan-date1">
+                                2015/11/12<br />
+                                4:30 PM
+                            </div>
+
+                        </ons-col>
+                        <ons-col width="6px" class="plan-center" ng-style="{ backgroundColor:a % 3 == 1 ? '#3399ff' : '#ccc'}">
+                        </ons-col>
+
+                        <ons-col class="plan-right">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                
+                <ons-list-item modifier="chevron" class="plan" ng-repeat=" a in [4,5]">
+
+                    <ons-row class="borderSet">
+                        <ons-col width="80px" class="plan-left">
+                            <div class="plan-date" id="plan-date1">
+                                2011/8/12<br />
+                                4:30 PM
+                            </div>
+
+                        </ons-col>
+                        <ons-col width="6px" class="plan-center" ng-style="{ backgroundColor:a % 3 == 1 ? '#3399ff' : '#ccc'}">
+                        </ons-col>
+
+                        <ons-col class="plan-right">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                
+                <ons-list-item modifier="chevron" class="plan" ng-repeat=" a in [6,7,8,9,10,11,12]">
+                    <ons-row class="borderSet">
+                        <ons-col width="80px" class="plan-left">
+                            <div class="plan-date" id="plan-date1">
+                                2012/10/23<br />
+                                4:20 PM
+                            </div>
+                        </ons-col>
+                        <ons-col width="6px" class="plan-center" ng-style="{ backgroundColor:a % 3 == 1 ? '#3399ff' : '#ccc'}">
+                        </ons-col>
+
+                        <ons-col class="plan-right">
+                            Mount Fuji is the highest mountain in Japan and a frequent attractive subject of Japanese art.  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+ -->
+
+            </ons-list>
+        </ons-page>
+   
+ 

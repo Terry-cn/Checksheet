@@ -1,0 +1,11 @@
+<ons-page  ng-controller="MessageDetailController">
+    <ons-toolbar id="BarborderBottom">
+       <div class="left"><ons-back-button>Back</ons-back-button></div>
+        <div class="center">{{message.title}}</div>
+        <div class="right navigation-bar__right" >
+            &nbsp;
+        </div>
+    </ons-toolbar>
+    <div class="article-content"  ng-bind-html="message.content | trustHtml">
+    </div>
+</ons-page>

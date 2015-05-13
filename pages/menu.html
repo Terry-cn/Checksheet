@@ -1,0 +1,32 @@
+<ons-page ng-controller="MenuController">
+    <ons-list style="background-color: white;">
+		<ons-list-item modifier="tappable" class="list__item__line-height"
+		               onclick="app.slidingMenu.setMainPage('pages/landingpage.html', { closeMenu: true })">
+		    <i class="fa fa-home"></i>
+		    Home
+		</ons-list-item>
+		<!--  <ng-include src="'pages/menutemplate.html'" ng-model="navigations"></ng-include> -->
+
+		<ons-list-item ng-repeat-start="navigation in navigations"  ng-if="navigation.type==2"
+		    modifier="tappable"  
+		    class="list__item__line-height"  ng-model="navigation" ng-click="openPage(navigation)">
+		    <i ng-class="{true:'fa',false:'fa fa-'+navigation.icon}[navigation.icon =='']"></i>
+		    {{navigation.title}}
+		</ons-list-item> 
+
+		<ons-list-item 
+		    ng-if="navigation.type==1" 
+		    ng-repeat-end
+		    modifier="chevron"  
+		    ng-click="openPage(navigation)"
+		    class="list__item__line-height">
+		    <i ng-class="{true:'fa',false:'fa fa-'+navigation.icon}[navigation.icon =='']"></i>
+		    {{navigation.title}}
+		</ons-list-item>
+		<ons-list-item modifier="tappable" class="list__item__line-height"
+		               onclick="app.slidingMenu.setMainPage('pages/messagelistpage.html', { closeMenu: true })">
+		    <i class="fa fa-envelope"></i>
+		    Messages
+		</ons-list-item>
+	</ons-list>
+</ons-page>

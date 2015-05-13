@@ -1,0 +1,29 @@
+<ons-page>
+    <ons-toolbar>
+        <div class="left">
+        </div>
+        <div class="center">Login</div>
+        <div class="right">
+        </div>
+    </ons-toolbar>
+    <div id="login_container" ng-controller="LoginController">
+        <img src="images/icon.png" id="loginPage_logo" />
+        <div class="login_title">The Aga Khan Health Board (UK)</div>
+        <br />
+        <input type="password" class="text-input" id="loginpwd" placeholder="Password" ng-model="password" ng-show="isready">
+        <!--<ons-button ng-click="app.slidingMenu.toggleMenu()">
+        Toggle Menu111
+        </ons-button> 这一段时跳转到菜单的-->
+        <button class="button button--large" id="btn_login" ng-init="" enabled="false" ng-click="login()" ng-show="isready">Login</button>
+     
+        <div class="login_content">
+            This application is for the Ismaili Community in
+            the UK. You must have a password to access the application. For more
+            information contact any member of the Aga Khan
+            Health Board for the UK.
+        </div>
+        <div class="login_foot">
+            Copyright &copy; The Ismaili Council for the UK
+        </div>
+    </div>
+</ons-page>

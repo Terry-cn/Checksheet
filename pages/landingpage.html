@@ -1,0 +1,23 @@
+﻿<ons-page  ng-controller="LandingPageController">
+    <ons-toolbar>
+        <div class="left">
+            <ons-toolbar-button ng-click="app.slidingMenu.toggleMenu()"><ons-icon icon="bars"></ons-icon></ons-toolbar-button>
+        </div>
+        <div class="center"></div>
+        <div class="right">
+            <i ng-show="hasMessage" class="fa fa-envelope-o  Editeve" onclick="app.slidingMenu.setMainPage('pages/messagelistpage.html', { closeMenu: true })"></i>
+        </div>
+    </ons-toolbar>
+    <div id="LandingPageContainer">
+        <div class ="landingPage_logo">
+            <img src="images/icon.png" />
+        </div>
+        
+        <div class="landingP_title">{{title}}</div>
+        <div class="landingContent" ng-bind-html="article">
+        </div>
+    </div>
+</ons-page>
+
+
+<!--<ons-button ng-click="app.slidingMenu.toggleMenu()">Toggle Menu</ons-button>  跳转到菜单-->

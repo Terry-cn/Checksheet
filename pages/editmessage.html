@@ -1,0 +1,21 @@
+﻿<ons-page>
+    <ons-toolbar>
+        <div class="left">
+            <!--<ons-toolbar-button ng-click="app.slidingMenu.toggleMenu()"><ons-icon icon="bars"></ons-icon></ons-toolbar-button>-->
+            <!--<i class="fa fa-arrow-left  positionSet"onclick="app.slidingMenu.setMainPage('Pages/LandingPage.html', { closeMenu: true })"></i>-->
+            <div class="left"><ons-back-button>Back</ons-back-button></div>
+        </div>
+        <div class="center">Send Message</div>
+        <div class="right">
+            <img src="images/logo-white.png" class="articlesAndAd_Logo">
+        </div> 
+    </ons-toolbar>
+    <div id="EditMessageContainer">
+        <div class="editMessageArea">
+            <textarea class="textarea" rows="10" id="textareaChangeCols" placeholder="Send your message !!!"></textarea>
+        </div>
+        <div class="SendMessage">
+            <button class="button button--large" id="btn_submit" onclick="myNavigator.popPage()">Send Message</button>
+        </div>
+    </div>
+</ons-page>
