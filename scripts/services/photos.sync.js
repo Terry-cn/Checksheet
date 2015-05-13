@@ -29,6 +29,7 @@ Nova.services.PhotosSync =  (function(){
 				}
 				
 				async.each(photos,function(photo,callback){
+					console.log("start photo resolveLocalFileSystemURL",photo,photos);
 					try{
 						var ft = new FileTransfer();
 						window.resolveLocalFileSystemURL(photo.path, function (photoEntry) {

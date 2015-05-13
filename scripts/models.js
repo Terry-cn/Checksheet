@@ -38,7 +38,8 @@ var Defects = persistence.define('defects', {
 var DefectPhotos = persistence.define('defectphotos', {
     path:"TEXT",
     status:"INT",
-    active:"INT"
+    active:"INT",
+    synccount:"INT"
 });
 
 var Locations = persistence.define('locations', {
