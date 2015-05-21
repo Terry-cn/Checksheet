@@ -43,23 +43,9 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
             return roles.indexOf(role) > -1;
         };
 
-        scope.email = "O&Muser1@gmail.com";
-        scope.password = "oM11!!";
-        var  localStorageAuthorization = localStorage.getItem('Authorization');
-        if(localStorageAuthorization && localStorageAuthorization.length > 0){
-            ajaxOption.headers.Authorization  = localStorageAuthorization;
-            try{
-                dbSync.startSync($http,ajaxOption,$rootScope);
-            }catch(e){
-                setTimeout(function(){
-                    dbSync.startSync($http,ajaxOption,$rootScope);
-                },60000);
-            }
-
-            photoSync.startSync();
-            myNavigator.pushPage("pages/list.html");
-          return;
-        }
+        //scope.email = "O&Muser1@gmail.com";
+        //scope.password = "oM11!!";
+        
         scope.login = function(form) {
 
             if (!form.$valid) {
@@ -113,7 +99,7 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
                 }
               
             }).error(function(err){
-                //console.log(err);
+                console.log(err);
                 if(err && err.error_description){
                     ons.notification.alert({
                         message:err.error_description
@@ -124,14 +110,30 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
             return false;
             //myNavigator.pushPage("pages/list.html");
         };
+
+        var  localStorageAuthorization = localStorage.getItem('Authorization');
+        if(localStorageAuthorization && localStorageAuthorization.length > 0){
+            ajaxOption.headers.Authorization  = localStorageAuthorization;
+            try{
+                dbSync.startSync($http,ajaxOption,$rootScope);
+            }catch(e){
+                setTimeout(function(){
+                    dbSync.startSync($http,ajaxOption,$rootScope);
+                },60000);
+            }
+
+            photoSync.startSync();
+            myNavigator.pushPage("pages/list.html");
+        }
 }]);
 module.controller('ChecksheetListController',['$scope','$http','$templateCache','$rootScope',
     function($scope, $http, $templateCache,$rootScope) {
+        var scope = $scope;
         function loadCheckList() {
             //$templateCache.put('model',null);
             DB.getCheckSheets(function (err, results) {
-                $scope.$apply(function () {
-                    $scope.CheckSheets = results;
+                scope.$apply(function () {
+                    scope.CheckSheets = results;
                 });
             })
         };
