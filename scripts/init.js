@@ -37,9 +37,29 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
     function($scope, $http, $templateCache,$rootScope) {
         var rootScope = $rootScope;
         var scope = $scope;
-       
+        //register Role function
+        window.isInRole = function(role){
+            var roles = JSON.parse(localStorage.getItem('Roles'));
+            return roles.indexOf(role) > -1;
+        };
+
         scope.email = "O&Muser1@gmail.com";
         scope.password = "oM11!!";
+        var  localStorageAuthorization = localStorage.getItem('Authorization');
+        if(localStorageAuthorization && localStorageAuthorization.length > 0){
+            ajaxOption.headers.Authorization  = localStorageAuthorization;
+            try{
+                dbSync.startSync($http,ajaxOption,$rootScope);
+            }catch(e){
+                setTimeout(function(){
+                    dbSync.startSync($http,ajaxOption,$rootScope);
+                },60000);
+            }
+
+            photoSync.startSync();
+            myNavigator.pushPage("pages/list.html");
+          return;
+        }
         scope.login = function(form) {
 
             if (!form.$valid) {
@@ -80,11 +100,7 @@ module.controller('LoginController',['$scope','$http','$templateCache','$rootSco
 
                         localStorage.setItem('Roles',JSON.stringify(roleData.Roles));
                         localStorage.setItem('Name',roleData.Name);
-                        //register Role function
-                        window.isInRole = function(role){
-                            var roles = JSON.parse(localStorage.getItem('Roles'));
-                            return roles.indexOf(role) > -1;
-                        };
+                        
                         //console.log(window.isInRole("Checksheet Admin"));
                         photoSync.startSync();
                         // ons.notification.alert({
@@ -131,8 +147,12 @@ module.controller('ChecksheetListController',['$scope','$http','$templateCache',
         $scope.$on('refreshCheckList', loadCheckList);
 
         $scope.syncOff = function(){
-            dbSync.stopSync();
-            photoSync.stopSync();
+            DB.clear(function(){
+                localStorage.clear();
+                dbSync.stopSync();
+                photoSync.stopSync();
+            });
+            
         }
 
         $scope.canEdit = window.isInRole("Checksheet Admin") || window.isInRole("Checksheet Resource");

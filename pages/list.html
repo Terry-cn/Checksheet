@@ -2,7 +2,7 @@
     <div id="list-checksheet" ng-controller="ChecksheetListController">
         <ons-toolbar>
             <div class="left">
-                <div class="left"><ons-back-button ng-click="syncOff()">Back</ons-back-button></div>
+                <div class="left"><ons-back-button ng-click="syncOff()">Logout</ons-back-button></div>
             </div>
             <div class="center">Checksheets</div>
             <div class="right toolbar-button" ng-show="canEdit">
@@ -30,7 +30,7 @@
             <ons-list-item>
                 <ons-row>
                     <ons-scroller>
-                        <table>
+                        <table style="width:100%;">
                             <tbody>
                             <tr ng-repeat="sheet in CheckSheets" ng-click="itemClick(sheet)">
                                 <td>{{sheet.assetchecksheet.asset.location.site.town.name}}</td>
